@@ -1,5 +1,6 @@
 import { PageHeader } from '@/components/PageHeader';
 import { WorkoutEditor } from '@/components/WorkoutEditor';
+import { PlanSelector } from '@/components/PlanSelector';
 import { getPlanWithDays, listExercises } from '@/lib/repositories';
 
 export const dynamic = 'force-dynamic';
@@ -8,8 +9,9 @@ export default function WeeklyWorkoutPage() {
   const { plan, days } = getPlanWithDays();
   const exercises = listExercises();
   return (
-    <div>
-      <PageHeader eyebrow="Scheda" title={plan ? plan.name : 'Scheda settimanale'} description="Crea giorni, aggiungi esercizi, modifica serie/reps/recupero e duplica la scheda." />
+    <div className="space-y-4">
+      <PageHeader eyebrow="Scheda" title={plan ? plan.name : 'Scheda settimanale'} description="Scegli la scheda attiva, crea giorni, aggiungi esercizi, modifica serie/reps/recupero e duplica la scheda." />
+      <PlanSelector />
       <WorkoutEditor initialDays={days} exercises={exercises} />
     </div>
   );
