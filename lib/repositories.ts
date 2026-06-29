@@ -528,5 +528,60 @@ export function countPushSubscriptions(): number {
   return r ? r.c : 0;
 }
 
+// ---------------- Backup / export / import ----------------
+const BACKUP_TABLES = ['user_profile', 'workout_plans', 'workout_days', 'exercises', 'workout_exercises', 'workout_logs', 'exercise_logs', 'diet_plans', 'diet_days', 'food_items', 'planned_meals', 'eaten_meals', 'nutrition_logs', 'body_metrics', 'notifications', 'app_settings'];
+
+export function exportAll() {
+  if (!dbReady()) return { version: 1, exportedAt: new Date().toISOString(), tables: {} as Record<string, any[]> };
+  const db = getDb();
+  const tables: Record<string, any[]> = {};
+  for (const t of BACKUP_TABLES) {
+    try { tables[t] = db.prepare('select * from ' + t).all(); } catch { tables[t] = []; }
+  }
+  return { version: 1, exportedAt: new Date().toISOString(), tables };
+}
+
+function toCsv(rows: any[]): string {
+  if (!rows || rows.length === 0) return '';
+  const cols = Object.keys(rows[0]);
+  const esc = (v: any) => { if (v === null || v === undefined) return ''; const s = String(v); return /[",\n]/.test(s) ? '"' + s.replace(/"/g, '""') + '"' : s; };
+  return [cols.join(','), ...rows.map((r) => cols.map((c) => esc(r[c])).join(','))].join('\n');
+}
+
+export function exportCsv(type: 'meals' | 'weight' | 'workouts' | 'exercises'): string {
+  if (!dbReady()) return '';
+  const db = getDb();
+  const q: Record<string, string> = {
+    meals: 'select meal_date, meal_type, name, quantity, unit, calories, protein_g, carbs_g, fat_g, status, source from eaten_meals order by meal_date',
+    weight: 'select metric_date, weight_kg, waist_cm, chest_cm, arm_cm, thigh_cm, body_fat_percent, sleep_hours, steps from body_metrics order by metric_date',
+    workouts: 'select wl.workout_date, wl.status, wl.completion_percent, wd.title from workout_logs wl left join workout_days wd on wd.id=wl.workout_day_id order by wl.workout_date',
+    exercises: 'select name, category, primary_muscle, secondary_muscles, equipment, difficulty from exercises order by name',
+  };
+  return toCsv(db.prepare(q[type]).all());
+}
+
+// Import a JSON backup. Mode 'replace' wipes the backed-up tables first.
+export function importBackup(data: any, mode: 'merge' | 'replace' = 'merge') {
+  if (!dbReady()) return { ok: true, demo: true };
+  if (!data || typeof data !== 'object' || !data.tables) throw new Error('Backup non valido');
+  const db = getDb();
+  const tx = db.transaction(() => {
+    db.pragma('foreign_keys=OFF');
+    if (mode === 'replace') { for (const t of [...BACKUP_TABLES].reverse()) { try { db.prepare('delete from ' + t).run(); } catch { /* skip */ } } }
+    for (const t of BACKUP_TABLES) {
+      const rows: any[] = data.tables[t] || [];
+      for (const row of rows) {
+        const cols = Object.keys(row);
+        if (cols.length === 0) continue;
+        const sql = 'insert or replace into ' + t + ' (' + cols.join(',') + ') values (' + cols.map(() => '?').join(',') + ')';
+        try { db.prepare(sql).run(...cols.map((c) => row[c])); } catch { /* skip incompatible row */ }
+      }
+    }
+    db.pragma('foreign_keys=ON');
+  });
+  tx();
+  return { ok: true };
+}
+
 // backward-compat alias used by older manual route
 export function addManualMeal(input: any) { return addEatenMeal(input); }
