@@ -1,0 +1,3 @@
+import Database from 'better-sqlite3'; import fs from 'node:fs'; import path from 'node:path';
+const dbPath=process.env.FITCONTROL_DB_PATH||path.join(process.cwd(),'data','fitcontrol.sqlite'); let instance:Database.Database|null=null;
+export function dbReady(){return fs.existsSync(dbPath)} export function getDb(){if(!dbReady()) throw new Error('Database non inizializzato. Esegui npm run setup:db'); if(!instance){instance=new Database(dbPath);instance.pragma('foreign_keys=ON')} return instance}

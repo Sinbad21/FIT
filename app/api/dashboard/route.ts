@@ -1,0 +1,1 @@
+import { NextResponse } from 'next/server'; import { getDashboard } from '@/lib/repositories'; export const runtime='nodejs'; export function GET(){return NextResponse.json(getDashboard())}

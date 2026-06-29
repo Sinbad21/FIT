@@ -1,0 +1,2 @@
+import Link from 'next/link';
+export function ActionGrid({actions}:{actions:{href:string;label:string;description:string}[]}){return <div className="grid gap-3 sm:grid-cols-2">{actions.map(a=><Link key={a.href} href={a.href} className="glass-card block rounded-[1.5rem] p-4 transition hover:-translate-y-.5 hover:shadow-soft"><p className="font-black text-slate-950">{a.label}</p><p className="mt-1 text-sm leading-5 text-slate-600">{a.description}</p></Link>)}</div>}

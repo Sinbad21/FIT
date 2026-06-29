@@ -1,0 +1,1 @@
+import { PageHeader } from '@/components/PageHeader'; export default function Page(){return <PageHeader eyebrow="Revisione" title="Tabella dieta importata" description="Giorni, pasti, alimenti e quantità estratti prima del salvataggio."/>}

@@ -1,0 +1,12 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root{color-scheme:light;--safe-bottom:env(safe-area-inset-bottom)}
+*{box-sizing:border-box}
+html{min-height:100%;background:#f8fafc;-webkit-text-size-adjust:100%}
+body{min-height:100%;margin:0;background:radial-gradient(circle at top left,rgba(34,197,94,.18),transparent 28rem),linear-gradient(180deg,#f8fafc,#eef2f7);color:#0f172a;font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+button,input,textarea,select{font:inherit} button,a{-webkit-tap-highlight-color:transparent}
+.safe-bottom{padding-bottom:calc(5.5rem + var(--safe-bottom))}
+.glass-card{border:1px solid rgba(148,163,184,.22);background:rgba(255,255,255,.86);backdrop-filter:blur(18px)}
+.dark-card{background:linear-gradient(145deg,#0f172a,#111827 65%,#052e16)}
