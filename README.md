@@ -155,6 +155,7 @@ Vedi `lib/ai/`.
 | `dev:https` | dev server HTTPS (certs in `certs/`) |
 | `build` / `start` | build e avvio produzione |
 | `setup:db` / `reset:db` | inizializza / reset database |
+| `seed:exercises` | crea 10 esercizi demo con immagini placeholder locali |
 | `lan:ip` | stampa l'IP LAN per l'iPhone |
 | `vapid:generate` | genera chiavi VAPID |
 | `push:run` | esegue lo scheduler dei promemoria |

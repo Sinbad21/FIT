@@ -113,7 +113,29 @@ export function getPlanWithDays() {
 
 export function listExercises() {
   if (!dbReady()) return [] as any[];
-  return getDb().prepare('select id, name, category, primary_muscle primaryMuscle, secondary_muscles secondaryMuscles, equipment, difficulty, technical_notes technicalNotes, image_url imageUrl from exercises order by name').all();
+  return getDb().prepare('select id, name, category, primary_muscle primaryMuscle, secondary_muscles secondaryMuscles, equipment, difficulty, technical_notes technicalNotes, image_url imageUrl, image_source imageSource, license imageLicense, ai_image_prompt imagePrompt from exercises order by name').all();
+}
+
+export function getExercise(id: string) {
+  if (!dbReady()) return null;
+  return getDb().prepare('select id, name, category, primary_muscle primaryMuscle, secondary_muscles secondaryMuscles, equipment, difficulty, technical_notes technicalNotes, image_url imageUrl, image_source imageSource, license imageLicense, ai_image_prompt imagePrompt from exercises where id=?').get(id) || null;
+}
+
+export function updateExercise(input: any) {
+  if (!dbReady()) return { ok: true, demo: true };
+  if (!input.id) throw new Error('id mancante');
+  getDb().prepare('update exercises set name=coalesce(?,name), category=coalesce(?,category), primary_muscle=coalesce(?,primary_muscle), secondary_muscles=coalesce(?,secondary_muscles), equipment=coalesce(?,equipment), difficulty=coalesce(?,difficulty), technical_notes=coalesce(?,technical_notes), image_url=coalesce(?,image_url), image_source=coalesce(?,image_source), license=coalesce(?,license), ai_image_prompt=coalesce(?,ai_image_prompt), updated_at=current_timestamp where id=?')
+    .run(input.name ?? null, input.category ?? null, input.primaryMuscle ?? null, input.secondaryMuscles ?? null, input.equipment ?? null, input.difficulty ?? null, input.technicalNotes ?? null, input.imageUrl ?? null, input.imageSource ?? null, input.imageLicense ?? null, input.imagePrompt ?? null, input.id);
+  return { ok: true, id: input.id };
+}
+
+export function deleteExercise(id: string) {
+  if (!dbReady()) return { ok: true, demo: true };
+  const db = getDb();
+  const used: any = db.prepare('select count(*) c from workout_exercises where exercise_id=?').get(id);
+  if (used && used.c > 0) throw new Error('Esercizio usato in ' + used.c + ' scheda/e: rimuovilo prima dalle schede.');
+  db.prepare('delete from exercises where id=?').run(id);
+  return { ok: true };
 }
 
 // ---------------- Workout (write) ----------------
@@ -183,8 +205,9 @@ export function deleteWorkoutExercise(id: string) {
 
 export function createExercise(input: any) {
   if (!dbReady()) return { ok: true, demo: true };
+  if (!input.name || !String(input.name).trim()) throw new Error('Nome esercizio obbligatorio');
   const id = randomUUID();
-  getDb().prepare('insert into exercises (id, name, category, primary_muscle, secondary_muscles, equipment, difficulty, technical_notes, image_url) values (?,?,?,?,?,?,?,?,?)').run(id, input.name, input.category || null, input.primaryMuscle || 'Generico', input.secondaryMuscles || null, input.equipment || null, input.difficulty || 'intermedio', input.technicalNotes || null, input.imageUrl || '/exercise-placeholder.svg');
+  getDb().prepare('insert into exercises (id, name, category, primary_muscle, secondary_muscles, equipment, difficulty, technical_notes, image_url, image_source, license, ai_image_prompt) values (?,?,?,?,?,?,?,?,?,?,?,?)').run(id, input.name, input.category || null, input.primaryMuscle || 'Generico', input.secondaryMuscles || null, input.equipment || null, input.difficulty || 'intermedio', input.technicalNotes || null, input.imageUrl || '/exercise-placeholder.svg', input.imageSource || null, input.imageLicense || null, input.imagePrompt || null);
   return { ok: true, id };
 }
 

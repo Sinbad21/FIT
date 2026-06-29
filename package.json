@@ -9,6 +9,7 @@
     "start": "next start -H 0.0.0.0",
     "setup:db": "node scripts/init-db.mjs",
     "reset:db": "node scripts/init-db.mjs --reset",
+    "seed:exercises": "node scripts/seed-exercises.mjs",
     "lan:ip": "node scripts/lan-ip.mjs",
     "vapid:generate": "node scripts/generate-vapid.mjs",
     "push:run": "node scripts/notify-scheduler.mjs"

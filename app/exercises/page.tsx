@@ -1,1 +1,15 @@
-import Link from 'next/link'; import { PageHeader } from '@/components/PageHeader'; import { getTodayWorkout } from '@/lib/repositories'; export default function Page(){const ex=getTodayWorkout().exercises;return <div><PageHeader eyebrow="Libreria" title="Esercizi" description="Archivio locale con imageUrl, muscoli, attrezzatura e note."/><div className="grid gap-3 sm:grid-cols-2">{ex.map((e:any)=><Link key={e.exerciseId} href={'/exercises/'+e.exerciseId} className="glass-card rounded-[1.6rem] p-4"><h3 className="font-black">{e.name}</h3><p className="text-sm text-slate-600">{e.primaryMuscle} · {e.equipment}</p></Link>)}</div></div>}
+import { PageHeader } from '@/components/PageHeader';
+import { ExerciseLibrary } from '@/components/ExerciseLibrary';
+import { listExercises } from '@/lib/repositories';
+
+export const dynamic = 'force-dynamic';
+
+export default function Page() {
+  const exercises = listExercises();
+  return (
+    <div className="space-y-4">
+      <PageHeader eyebrow="Libreria" title="Esercizi" description="Cerca, filtra, crea e modifica gli esercizi. Immagini locali o URL, con fonte e licenza." />
+      <ExerciseLibrary initial={exercises as any} />
+    </div>
+  );
+}
