@@ -241,6 +241,38 @@ export function generatePlan(input: { goal: string; daysPerWeek: number; level: 
   return { ok: true, id: planId, days: dayDefs.length };
 }
 
+// Persist a structured plan produced by the AI provider. Exercises are matched
+// by name (case-insensitive) or created on the fly. The new plan becomes active.
+export function saveGeneratedPlan(plan: { name?: string; goal?: string; level?: string; equipment?: string; days: any[] }) {
+  if (!dbReady()) return { ok: true, demo: true };
+  const db = getDb();
+  const prof: any = db.prepare('select id from user_profile limit 1').get();
+  const planId = randomUUID();
+  const findOrCreateExercise = (name: string, primaryMuscle?: string) => {
+    const existing: any = db.prepare('select id from exercises where lower(name)=lower(?)').get(name);
+    if (existing) return existing.id;
+    const id = randomUUID();
+    db.prepare('insert into exercises (id, name, category, primary_muscle, difficulty, image_url) values (?,?,?,?,?,?)').run(id, name, 'generato', primaryMuscle || 'Generico', 'intermedio', '/exercise-placeholder.svg');
+    return id;
+  };
+  const tx = db.transaction(() => {
+    db.prepare('update workout_plans set active=0').run();
+    db.prepare('insert into workout_plans (id, user_profile_id, name, goal, level, days_per_week, equipment, ai_generated, active) values (?,?,?,?,?,?,?,1,1)')
+      .run(planId, prof ? prof.id : null, plan.name || 'Scheda AI', plan.goal || null, plan.level || null, (plan.days || []).length, plan.equipment || null);
+    (plan.days || []).forEach((d: any, di: number) => {
+      const dayId = randomUUID();
+      db.prepare('insert into workout_days (id, workout_plan_id, day_of_week, order_index, title, focus) values (?,?,?,?,?,?)').run(dayId, planId, Number(d.dayOfWeek ?? di + 1), di, d.title || ('Giorno ' + (di + 1)), d.focus || null);
+      (d.exercises || []).forEach((e: any, ei: number) => {
+        const exId = findOrCreateExercise(e.name, e.primaryMuscle);
+        db.prepare('insert into workout_exercises (id, workout_day_id, exercise_id, order_index, sets, reps, rest_seconds, progression_note) values (?,?,?,?,?,?,?,?)')
+          .run(randomUUID(), dayId, exId, ei, Number(e.sets) || 3, String(e.reps || '8-12'), Number(e.restSeconds) || 75, e.note || null);
+      });
+    });
+  });
+  tx();
+  return { ok: true, id: planId, days: (plan.days || []).length };
+}
+
 // ---------------- Diet (read) ----------------
 export function getTodayMeals(): Meal[] {
   if (!dbReady()) return [];
