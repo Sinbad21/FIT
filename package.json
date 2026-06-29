@@ -4,10 +4,14 @@
   "private": true,
   "scripts": {
     "dev": "next dev -H 0.0.0.0",
+    "dev:https": "node scripts/https-server.mjs",
     "build": "next build",
     "start": "next start -H 0.0.0.0",
     "setup:db": "node scripts/init-db.mjs",
-    "reset:db": "node scripts/init-db.mjs --reset"
+    "reset:db": "node scripts/init-db.mjs --reset",
+    "lan:ip": "node scripts/lan-ip.mjs",
+    "vapid:generate": "node scripts/generate-vapid.mjs",
+    "push:run": "node scripts/notify-scheduler.mjs"
   },
   "dependencies": {
     "better-sqlite3": "^11.9.1",
@@ -16,13 +20,16 @@
     "pdf-parse": "^1.1.1",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
-    "recharts": "^2.15.0"
+    "recharts": "^2.15.0",
+    "web-push": "^3.6.7",
+    "zod": "^3.25.76"
   },
   "devDependencies": {
     "@types/better-sqlite3": "^7.6.11",
     "@types/node": "^22.10.0",
     "@types/react": "^19.0.0",
     "@types/react-dom": "^19.0.0",
+    "@types/web-push": "^3.6.4",
     "autoprefixer": "^10.4.20",
     "eslint": "^9.17.0",
     "eslint-config-next": "^15.3.0",

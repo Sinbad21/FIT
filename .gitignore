@@ -4,3 +4,6 @@ node_modules
 data/*.sqlite
 data/*.sqlite-*
 tsconfig.tsbuildinfo
+
+certs/
+.env.local

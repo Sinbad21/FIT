@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { postWithOffline } from '@/lib/offline/sync';
 
 export function WaterTracker({ current, target }: { current: number; target: number }) {
   const router = useRouter();
@@ -9,8 +10,8 @@ export function WaterTracker({ current, target }: { current: number; target: num
   async function add(delta: number) {
     const next = Math.max(0, Number((value + delta).toFixed(2)));
     setValue(next);
-    await fetch('/api/water', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ delta }) });
-    router.refresh();
+    const r = await postWithOffline('/api/water', { delta }, `Acqua ${delta > 0 ? '+' : ''}${delta} L`);
+    if (!r.queued) router.refresh();
   }
   return (
     <article className="glass-card rounded-[1.6rem] p-4">
@@ -31,9 +32,10 @@ export function MetricLogger() {
   const [waist, setWaist] = useState('');
   const [msg, setMsg] = useState('');
   async function save() {
-    await fetch('/api/body-metrics', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ weightKg: weight, waistCm: waist }) });
-    setMsg('Salvato'); setWeight(''); setWaist(''); router.refresh();
-    setTimeout(() => setMsg(''), 1500);
+    const r = await postWithOffline('/api/body-metrics', { weightKg: weight, waistCm: waist }, 'Misure corporee');
+    setMsg(r.queued ? 'Salvato offline (in coda)' : 'Salvato'); setWeight(''); setWaist('');
+    if (!r.queued) router.refresh();
+    setTimeout(() => setMsg(''), 1800);
   }
   return (
     <article className="glass-card rounded-[1.6rem] p-4">

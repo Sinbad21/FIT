@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import type { WorkoutExercise } from '@/lib/types';
+import { postWithOffline } from '@/lib/offline/sync';
 
 export function ExerciseCard({ exercise }: { exercise: WorkoutExercise }) {
   const [done, setDone] = useState(Boolean(exercise.completed));
@@ -14,7 +15,7 @@ export function ExerciseCard({ exercise }: { exercise: WorkoutExercise }) {
   async function send(payload: any) {
     setSaving(true);
     try {
-      await fetch('/api/workouts/complete', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ workoutExerciseId: exercise.workoutExerciseId, exerciseId: exercise.exerciseId, ...payload }) });
+      await postWithOffline('/api/workouts/complete', { workoutExerciseId: exercise.workoutExerciseId, exerciseId: exercise.exerciseId, ...payload }, `Log esercizio: ${exercise.name}`);
     } finally { setSaving(false); }
   }
 

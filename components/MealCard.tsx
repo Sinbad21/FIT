@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import type { Meal } from '@/lib/types';
+import { postWithOffline } from '@/lib/offline/sync';
 
 type Mode = null | 'edit' | 'replace';
 
@@ -24,8 +25,8 @@ export function MealCard({ meal }: { meal: Meal }) {
 
   async function update(next: 'mangiato' | 'saltato') {
     setStatus(next);
-    await fetch('/api/diet/meal-status', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ plannedMealId: meal.id, status: next }) });
-    router.refresh();
+    const r = await postWithOffline('/api/diet/meal-status', { plannedMealId: meal.id, status: next }, `Pasto ${next}: ${meal.name}`);
+    if (!r.queued) router.refresh();
   }
 
   function openReplace() {
@@ -39,17 +40,16 @@ export function MealCard({ meal }: { meal: Meal }) {
   async function save() {
     setBusy(true);
     try {
-      const res = await fetch('/api/diet/meal-edit', {
-        method: 'POST', headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          plannedMealId: meal.id, replace: mode === 'replace',
-          name: form.name, quantity: form.quantity, unit: form.unit,
-          calories: form.calories, proteinG: form.proteinG, carbsG: form.carbsG, fatG: form.fatG, notes: form.notes,
-        }),
-      });
-      const d = await res.json();
-      if (d.ok) { setStatus(d.status || 'modificato'); setMode(null); router.refresh(); }
-      else alert(d.error || 'Errore salvataggio');
+      const r = await postWithOffline('/api/diet/meal-edit', {
+        plannedMealId: meal.id, replace: mode === 'replace',
+        name: form.name, quantity: form.quantity, unit: form.unit,
+        calories: form.calories, proteinG: form.proteinG, carbsG: form.carbsG, fatG: form.fatG, notes: form.notes,
+      }, `${mode === 'replace' ? 'Sostituito' : 'Modificato'}: ${form.name || meal.name}`);
+      if (r.ok) {
+        setStatus(r.queued ? (mode === 'replace' ? 'sostituito' : 'modificato') : (r.data?.status || 'modificato'));
+        setMode(null);
+        if (!r.queued) router.refresh();
+      } else alert('Errore salvataggio');
     } finally { setBusy(false); }
   }
 

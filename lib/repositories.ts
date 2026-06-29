@@ -451,5 +451,27 @@ export function deleteNotification(id: string) {
   return { ok: true };
 }
 
+// ---------------- Push subscriptions ----------------
+export function savePushSubscription(input: { endpoint: string; keys: { p256dh: string; auth: string }; userAgent?: string }) {
+  if (!dbReady()) return { ok: true, demo: true };
+  if (!input?.endpoint || !input?.keys?.p256dh || !input?.keys?.auth) throw new Error('Subscription non valida');
+  const db = getDb();
+  db.prepare('insert into push_subscriptions (id, endpoint, p256dh, auth, user_agent, enabled) values (?,?,?,?,?,1) on conflict(endpoint) do update set p256dh=excluded.p256dh, auth=excluded.auth, user_agent=excluded.user_agent, enabled=1, updated_at=current_timestamp')
+    .run(randomUUID(), input.endpoint, input.keys.p256dh, input.keys.auth, input.userAgent || null);
+  return { ok: true };
+}
+
+export function deletePushSubscription(endpoint: string) {
+  if (!dbReady()) return { ok: true, demo: true };
+  getDb().prepare('delete from push_subscriptions where endpoint=?').run(endpoint);
+  return { ok: true };
+}
+
+export function countPushSubscriptions(): number {
+  if (!dbReady()) return 0;
+  const r: any = getDb().prepare('select count(*) c from push_subscriptions where enabled=1').get();
+  return r ? r.c : 0;
+}
+
 // backward-compat alias used by older manual route
 export function addManualMeal(input: any) { return addEatenMeal(input); }
