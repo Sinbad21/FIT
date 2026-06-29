@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { extractDietRows } from '@/lib/pdf';
+import { extractDietFromPdf } from '@/lib/ai/extractDietFromPdf';
 export const runtime = 'nodejs';
 export async function POST(req: Request) {
   const form = await req.formData();
@@ -10,7 +10,13 @@ export async function POST(req: Request) {
     const pdfParse = (await import('pdf-parse')).default;
     const parsed = await pdfParse(buffer);
     const text = parsed.text || '';
-    return NextResponse.json({ fileName: file.name, rows: extractDietRows(text), rawPreview: text.slice(0, 4000) });
+    // Digital PDF: text is present. If empty, it's likely scanned -> needs OCR (not bundled).
+    if (!text.trim()) {
+      return NextResponse.json({ fileName: file.name, rows: [], rawPreview: '', provider: 'none', warning: 'PDF probabilmente scansionato: nessun testo estraibile. Serve OCR o inserimento manuale.' });
+    }
+    const { rows, provider } = await extractDietFromPdf(text);
+    // Output sempre revisionabile: mai salvato direttamente senza conferma utente.
+    return NextResponse.json({ fileName: file.name, rows, rawPreview: text.slice(0, 4000), provider });
   } catch (e) {
     return NextResponse.json({ error: 'Parsing PDF non riuscito', details: String(e) }, { status: 422 });
   }

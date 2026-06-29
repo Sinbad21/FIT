@@ -1,4 +1,8 @@
 import { NextResponse } from 'next/server';
-import { parseMealHeuristically } from '@/lib/ai';
+import { parseMeal } from '@/lib/ai/parseMeal';
 export const runtime = 'nodejs';
-export async function POST(req: Request) { const { text } = await req.json(); return NextResponse.json({ items: parseMealHeuristically(String(text || '')), provider: 'local-heuristic' }); }
+export async function POST(req: Request) {
+  const { text } = await req.json();
+  const r = await parseMeal(String(text || ''));
+  return NextResponse.json({ items: r.items, provider: r.provider, needsConfirmation: r.needsConfirmation });
+}

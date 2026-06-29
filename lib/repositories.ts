@@ -45,18 +45,58 @@ export function getActivePlanId(): string | null {
   return r ? r.id : null;
 }
 
+export function getActiveDietPlanId(): string | null {
+  if (!dbReady()) return null;
+  const r: any = getDb().prepare('select id from diet_plans where active=1 order by updated_at desc limit 1').get() || getDb().prepare('select id from diet_plans order by updated_at desc limit 1').get();
+  return r ? r.id : null;
+}
+
 export function getTodayWorkout() {
   if (!dbReady()) return { id: null, title: 'Petto e Tricipiti', focus: 'Spinta ipertrofia', exercises: [] as WorkoutExercise[] };
   const db = getDb();
-  const day: any = db.prepare('select * from workout_days where day_of_week=? order by order_index limit 1').get(dow());
+  const planId = getActivePlanId();
+  if (!planId) return { id: null, title: 'Nessuna scheda attiva', focus: 'Seleziona o genera una scheda attiva', exercises: [] as WorkoutExercise[], noActivePlan: true };
+  const day: any = db.prepare('select * from workout_days where workout_plan_id=? and day_of_week=? order by order_index limit 1').get(planId, dow());
   if (!day) return { id: null, title: 'Riposo attivo', focus: 'Mobilita e passi', exercises: [] as WorkoutExercise[] };
   const ex: any[] = db.prepare('select we.id workoutExerciseId, e.id exerciseId, e.name, e.category, e.primary_muscle primaryMuscle, e.secondary_muscles secondaryMuscles, e.equipment, we.sets, we.reps, we.rest_seconds restSeconds, e.difficulty, coalesce(we.notes, e.technical_notes) technicalNotes, e.image_url imageUrl, coalesce(el.completed,0) completed, el.weight_kg weightKg, el.reps_done repsDone, el.rpe rpe from workout_exercises we join exercises e on e.id=we.exercise_id left join workout_logs wl on wl.workout_day_id=we.workout_day_id and wl.workout_date=? left join exercise_logs el on el.workout_log_id=wl.id and el.workout_exercise_id=we.id where we.workout_day_id=? order by we.order_index').all(isoToday(), day.id);
   return { id: day.id, title: day.title, focus: day.focus, exercises: ex as WorkoutExercise[] };
 }
 
+export function listPlans() {
+  if (!dbReady()) return [] as any[];
+  return getDb().prepare('select p.id, p.name, p.goal, p.level, p.days_per_week daysPerWeek, p.ai_generated aiGenerated, p.active, (select count(*) from workout_days d where d.workout_plan_id=p.id) dayCount from workout_plans p order by p.active desc, p.updated_at desc').all();
+}
+
+export function setActivePlan(planId: string) {
+  if (!dbReady()) return { ok: true, demo: true };
+  const db = getDb();
+  const plan: any = db.prepare('select id from workout_plans where id=?').get(planId);
+  if (!plan) throw new Error('Scheda non trovata');
+  const tx = db.transaction(() => {
+    db.prepare('update workout_plans set active=0').run();
+    db.prepare('update workout_plans set active=1, updated_at=current_timestamp where id=?').run(planId);
+  });
+  tx();
+  return { ok: true, id: planId };
+}
+
+export function deletePlan(planId: string) {
+  if (!dbReady()) return { ok: true, demo: true };
+  const db = getDb();
+  const wasActive: any = db.prepare('select active from workout_plans where id=?').get(planId);
+  db.prepare('delete from workout_plans where id=?').run(planId);
+  if (wasActive && wasActive.active) {
+    const next: any = db.prepare('select id from workout_plans order by updated_at desc limit 1').get();
+    if (next) db.prepare('update workout_plans set active=1 where id=?').run(next.id);
+  }
+  return { ok: true };
+}
+
 export function getWeeklyWorkout() {
   if (!dbReady()) return [] as any[];
-  return getDb().prepare('select wd.id, wd.title, wd.day_of_week dayOfWeek, wd.focus, count(we.id) exerciseCount from workout_days wd left join workout_exercises we on we.workout_day_id=wd.id group by wd.id order by wd.day_of_week, wd.order_index').all();
+  const planId = getActivePlanId();
+  if (!planId) return [] as any[];
+  return getDb().prepare('select wd.id, wd.title, wd.day_of_week dayOfWeek, wd.focus, count(we.id) exerciseCount from workout_days wd left join workout_exercises we on we.workout_day_id=wd.id where wd.workout_plan_id=? group by wd.id order by wd.day_of_week, wd.order_index').all(planId);
 }
 
 export function getPlanWithDays() {
@@ -73,7 +113,29 @@ export function getPlanWithDays() {
 
 export function listExercises() {
   if (!dbReady()) return [] as any[];
-  return getDb().prepare('select id, name, category, primary_muscle primaryMuscle, secondary_muscles secondaryMuscles, equipment, difficulty, technical_notes technicalNotes, image_url imageUrl from exercises order by name').all();
+  return getDb().prepare('select id, name, category, primary_muscle primaryMuscle, secondary_muscles secondaryMuscles, equipment, difficulty, technical_notes technicalNotes, image_url imageUrl, image_source imageSource, license imageLicense, ai_image_prompt imagePrompt from exercises order by name').all();
+}
+
+export function getExercise(id: string) {
+  if (!dbReady()) return null;
+  return getDb().prepare('select id, name, category, primary_muscle primaryMuscle, secondary_muscles secondaryMuscles, equipment, difficulty, technical_notes technicalNotes, image_url imageUrl, image_source imageSource, license imageLicense, ai_image_prompt imagePrompt from exercises where id=?').get(id) || null;
+}
+
+export function updateExercise(input: any) {
+  if (!dbReady()) return { ok: true, demo: true };
+  if (!input.id) throw new Error('id mancante');
+  getDb().prepare('update exercises set name=coalesce(?,name), category=coalesce(?,category), primary_muscle=coalesce(?,primary_muscle), secondary_muscles=coalesce(?,secondary_muscles), equipment=coalesce(?,equipment), difficulty=coalesce(?,difficulty), technical_notes=coalesce(?,technical_notes), image_url=coalesce(?,image_url), image_source=coalesce(?,image_source), license=coalesce(?,license), ai_image_prompt=coalesce(?,ai_image_prompt), updated_at=current_timestamp where id=?')
+    .run(input.name ?? null, input.category ?? null, input.primaryMuscle ?? null, input.secondaryMuscles ?? null, input.equipment ?? null, input.difficulty ?? null, input.technicalNotes ?? null, input.imageUrl ?? null, input.imageSource ?? null, input.imageLicense ?? null, input.imagePrompt ?? null, input.id);
+  return { ok: true, id: input.id };
+}
+
+export function deleteExercise(id: string) {
+  if (!dbReady()) return { ok: true, demo: true };
+  const db = getDb();
+  const used: any = db.prepare('select count(*) c from workout_exercises where exercise_id=?').get(id);
+  if (used && used.c > 0) throw new Error('Esercizio usato in ' + used.c + ' scheda/e: rimuovilo prima dalle schede.');
+  db.prepare('delete from exercises where id=?').run(id);
+  return { ok: true };
 }
 
 // ---------------- Workout (write) ----------------
@@ -143,8 +205,9 @@ export function deleteWorkoutExercise(id: string) {
 
 export function createExercise(input: any) {
   if (!dbReady()) return { ok: true, demo: true };
+  if (!input.name || !String(input.name).trim()) throw new Error('Nome esercizio obbligatorio');
   const id = randomUUID();
-  getDb().prepare('insert into exercises (id, name, category, primary_muscle, secondary_muscles, equipment, difficulty, technical_notes, image_url) values (?,?,?,?,?,?,?,?,?)').run(id, input.name, input.category || null, input.primaryMuscle || 'Generico', input.secondaryMuscles || null, input.equipment || null, input.difficulty || 'intermedio', input.technicalNotes || null, input.imageUrl || '/exercise-placeholder.svg');
+  getDb().prepare('insert into exercises (id, name, category, primary_muscle, secondary_muscles, equipment, difficulty, technical_notes, image_url, image_source, license, ai_image_prompt) values (?,?,?,?,?,?,?,?,?,?,?,?)').run(id, input.name, input.category || null, input.primaryMuscle || 'Generico', input.secondaryMuscles || null, input.equipment || null, input.difficulty || 'intermedio', input.technicalNotes || null, input.imageUrl || '/exercise-placeholder.svg', input.imageSource || null, input.imageLicense || null, input.imagePrompt || null);
   return { ok: true, id };
 }
 
@@ -201,11 +264,44 @@ export function generatePlan(input: { goal: string; daysPerWeek: number; level: 
   return { ok: true, id: planId, days: dayDefs.length };
 }
 
+// Persist a structured plan produced by the AI provider. Exercises are matched
+// by name (case-insensitive) or created on the fly. The new plan becomes active.
+export function saveGeneratedPlan(plan: { name?: string; goal?: string; level?: string; equipment?: string; days: any[] }) {
+  if (!dbReady()) return { ok: true, demo: true };
+  const db = getDb();
+  const prof: any = db.prepare('select id from user_profile limit 1').get();
+  const planId = randomUUID();
+  const findOrCreateExercise = (name: string, primaryMuscle?: string) => {
+    const existing: any = db.prepare('select id from exercises where lower(name)=lower(?)').get(name);
+    if (existing) return existing.id;
+    const id = randomUUID();
+    db.prepare('insert into exercises (id, name, category, primary_muscle, difficulty, image_url) values (?,?,?,?,?,?)').run(id, name, 'generato', primaryMuscle || 'Generico', 'intermedio', '/exercise-placeholder.svg');
+    return id;
+  };
+  const tx = db.transaction(() => {
+    db.prepare('update workout_plans set active=0').run();
+    db.prepare('insert into workout_plans (id, user_profile_id, name, goal, level, days_per_week, equipment, ai_generated, active) values (?,?,?,?,?,?,?,1,1)')
+      .run(planId, prof ? prof.id : null, plan.name || 'Scheda AI', plan.goal || null, plan.level || null, (plan.days || []).length, plan.equipment || null);
+    (plan.days || []).forEach((d: any, di: number) => {
+      const dayId = randomUUID();
+      db.prepare('insert into workout_days (id, workout_plan_id, day_of_week, order_index, title, focus) values (?,?,?,?,?,?)').run(dayId, planId, Number(d.dayOfWeek ?? di + 1), di, d.title || ('Giorno ' + (di + 1)), d.focus || null);
+      (d.exercises || []).forEach((e: any, ei: number) => {
+        const exId = findOrCreateExercise(e.name, e.primaryMuscle);
+        db.prepare('insert into workout_exercises (id, workout_day_id, exercise_id, order_index, sets, reps, rest_seconds, progression_note) values (?,?,?,?,?,?,?,?)')
+          .run(randomUUID(), dayId, exId, ei, Number(e.sets) || 3, String(e.reps || '8-12'), Number(e.restSeconds) || 75, e.note || null);
+      });
+    });
+  });
+  tx();
+  return { ok: true, id: planId, days: (plan.days || []).length };
+}
+
 // ---------------- Diet (read) ----------------
 export function getTodayMeals(): Meal[] {
   if (!dbReady()) return [];
   const db = getDb();
-  const planned: any[] = db.prepare('select pm.id, pm.meal_type mealType, pm.name, pm.quantity, pm.unit, pm.calories, pm.protein_g proteinG, pm.carbs_g carbsG, pm.fat_g fatG, pm.fiber_g fiberG, coalesce(em.status, pm.status) status from planned_meals pm join diet_days dd on dd.id=pm.diet_day_id left join eaten_meals em on em.planned_meal_id=pm.id and em.meal_date=? where dd.day_of_week=? order by pm.order_index').all(isoToday(), dow());
+  const planId = getActiveDietPlanId();
+  const planned: any[] = db.prepare('select pm.id, pm.meal_type mealType, coalesce(em.name, pm.name) name, coalesce(em.quantity, pm.quantity) quantity, coalesce(em.unit, pm.unit) unit, coalesce(em.calories, pm.calories) calories, coalesce(em.protein_g, pm.protein_g) proteinG, coalesce(em.carbs_g, pm.carbs_g) carbsG, coalesce(em.fat_g, pm.fat_g) fatG, coalesce(em.fiber_g, pm.fiber_g) fiberG, coalesce(em.notes, pm.notes) notes, coalesce(em.status, pm.status) status, pm.name plannedName, pm.calories plannedCalories from planned_meals pm join diet_days dd on dd.id=pm.diet_day_id left join eaten_meals em on em.planned_meal_id=pm.id and em.meal_date=? where dd.day_of_week=? and (? is null or dd.diet_plan_id=?) order by pm.order_index').all(isoToday(), dow(), planId, planId);
   return planned as Meal[];
 }
 
@@ -224,6 +320,35 @@ export function markMeal(input: { plannedMealId: string; status: 'mangiato' | 's
     .run(randomUUID(), isoToday(), input.plannedMealId, m.meal_type, m.name, m.quantity, m.unit, m.calories, m.protein_g, m.carbs_g, m.fat_g, m.fiber_g, input.status, 'planned');
   recomputeNutritionLog();
   return { ok: true };
+}
+
+// Edit or replace a planned meal: keeps the same meal_type, recomputes macros,
+// and saves to history as 'modificato' (edit) or 'sostituito' (replace).
+export function editPlannedMeal(input: { plannedMealId: string; replace?: boolean; name?: string; quantity?: number; unit?: string; calories?: number; proteinG?: number; carbsG?: number; fatG?: number; fiberG?: number; notes?: string }) {
+  if (!dbReady()) return { ok: true, demo: true };
+  const db = getDb();
+  const m: any = db.prepare('select * from planned_meals where id=?').get(input.plannedMealId);
+  if (!m) throw new Error('Pasto non trovato');
+  const num = (v: any, fb: number) => (v === '' || v === undefined || v === null ? fb : Number(v));
+  // For an existing override, fall back to the previous eaten values, else the planned ones.
+  const prev: any = db.prepare('select * from eaten_meals where planned_meal_id=? and meal_date=?').get(input.plannedMealId, isoToday());
+  const base = prev || m;
+  const status = input.replace ? 'sostituito' : 'modificato';
+  const vals = {
+    name: input.name ?? base.name,
+    quantity: num(input.quantity, base.quantity),
+    unit: input.unit ?? base.unit,
+    calories: num(input.calories, base.calories),
+    protein_g: num(input.proteinG, base.protein_g),
+    carbs_g: num(input.carbsG, base.carbs_g),
+    fat_g: num(input.fatG, base.fat_g),
+    fiber_g: num(input.fiberG, base.fiber_g),
+    notes: input.notes ?? base.notes ?? null,
+  };
+  db.prepare('insert into eaten_meals (id, meal_date, planned_meal_id, meal_type, name, quantity, unit, calories, protein_g, carbs_g, fat_g, fiber_g, status, source, notes) values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) on conflict(planned_meal_id, meal_date) do update set name=excluded.name, quantity=excluded.quantity, unit=excluded.unit, calories=excluded.calories, protein_g=excluded.protein_g, carbs_g=excluded.carbs_g, fat_g=excluded.fat_g, fiber_g=excluded.fiber_g, status=excluded.status, notes=excluded.notes, updated_at=current_timestamp')
+    .run(randomUUID(), isoToday(), input.plannedMealId, m.meal_type, vals.name, vals.quantity, vals.unit, vals.calories, vals.protein_g, vals.carbs_g, vals.fat_g, vals.fiber_g, status, 'planned', vals.notes);
+  recomputeNutritionLog();
+  return { ok: true, status };
 }
 
 export function addEatenMeal(input: any) {
@@ -245,7 +370,7 @@ export function addEatenMeals(items: any[]) {
 export function recomputeNutritionLog(date = isoToday()) {
   if (!dbReady()) return;
   const db = getDb();
-  const t: any = db.prepare("select coalesce(sum(calories),0) calories, coalesce(sum(protein_g),0) protein_g, coalesce(sum(carbs_g),0) carbs_g, coalesce(sum(fat_g),0) fat_g, coalesce(sum(fiber_g),0) fiber_g from eaten_meals where meal_date=? and status in ('mangiato','modificato')").get(date);
+  const t: any = db.prepare("select coalesce(sum(calories),0) calories, coalesce(sum(protein_g),0) protein_g, coalesce(sum(carbs_g),0) carbs_g, coalesce(sum(fat_g),0) fat_g, coalesce(sum(fiber_g),0) fiber_g from eaten_meals where meal_date=? and status in ('mangiato','modificato','sostituito')").get(date);
   db.prepare('insert into nutrition_logs (id, log_date, calories, protein_g, carbs_g, fat_g, fiber_g) values (?,?,?,?,?,?,?) on conflict(log_date) do update set calories=excluded.calories, protein_g=excluded.protein_g, carbs_g=excluded.carbs_g, fat_g=excluded.fat_g, fiber_g=excluded.fiber_g, updated_at=current_timestamp')
     .run(randomUUID(), date, t.calories, t.protein_g, t.carbs_g, t.fat_g, t.fiber_g);
 }
@@ -378,6 +503,83 @@ export function upsertNotification(input: any) {
 export function deleteNotification(id: string) {
   if (!dbReady()) return { ok: true, demo: true };
   getDb().prepare('delete from notifications where id=?').run(id);
+  return { ok: true };
+}
+
+// ---------------- Push subscriptions ----------------
+export function savePushSubscription(input: { endpoint: string; keys: { p256dh: string; auth: string }; userAgent?: string }) {
+  if (!dbReady()) return { ok: true, demo: true };
+  if (!input?.endpoint || !input?.keys?.p256dh || !input?.keys?.auth) throw new Error('Subscription non valida');
+  const db = getDb();
+  db.prepare('insert into push_subscriptions (id, endpoint, p256dh, auth, user_agent, enabled) values (?,?,?,?,?,1) on conflict(endpoint) do update set p256dh=excluded.p256dh, auth=excluded.auth, user_agent=excluded.user_agent, enabled=1, updated_at=current_timestamp')
+    .run(randomUUID(), input.endpoint, input.keys.p256dh, input.keys.auth, input.userAgent || null);
+  return { ok: true };
+}
+
+export function deletePushSubscription(endpoint: string) {
+  if (!dbReady()) return { ok: true, demo: true };
+  getDb().prepare('delete from push_subscriptions where endpoint=?').run(endpoint);
+  return { ok: true };
+}
+
+export function countPushSubscriptions(): number {
+  if (!dbReady()) return 0;
+  const r: any = getDb().prepare('select count(*) c from push_subscriptions where enabled=1').get();
+  return r ? r.c : 0;
+}
+
+// ---------------- Backup / export / import ----------------
+const BACKUP_TABLES = ['user_profile', 'workout_plans', 'workout_days', 'exercises', 'workout_exercises', 'workout_logs', 'exercise_logs', 'diet_plans', 'diet_days', 'food_items', 'planned_meals', 'eaten_meals', 'nutrition_logs', 'body_metrics', 'notifications', 'app_settings'];
+
+export function exportAll() {
+  if (!dbReady()) return { version: 1, exportedAt: new Date().toISOString(), tables: {} as Record<string, any[]> };
+  const db = getDb();
+  const tables: Record<string, any[]> = {};
+  for (const t of BACKUP_TABLES) {
+    try { tables[t] = db.prepare('select * from ' + t).all(); } catch { tables[t] = []; }
+  }
+  return { version: 1, exportedAt: new Date().toISOString(), tables };
+}
+
+function toCsv(rows: any[]): string {
+  if (!rows || rows.length === 0) return '';
+  const cols = Object.keys(rows[0]);
+  const esc = (v: any) => { if (v === null || v === undefined) return ''; const s = String(v); return /[",\n]/.test(s) ? '"' + s.replace(/"/g, '""') + '"' : s; };
+  return [cols.join(','), ...rows.map((r) => cols.map((c) => esc(r[c])).join(','))].join('\n');
+}
+
+export function exportCsv(type: 'meals' | 'weight' | 'workouts' | 'exercises'): string {
+  if (!dbReady()) return '';
+  const db = getDb();
+  const q: Record<string, string> = {
+    meals: 'select meal_date, meal_type, name, quantity, unit, calories, protein_g, carbs_g, fat_g, status, source from eaten_meals order by meal_date',
+    weight: 'select metric_date, weight_kg, waist_cm, chest_cm, arm_cm, thigh_cm, body_fat_percent, sleep_hours, steps from body_metrics order by metric_date',
+    workouts: 'select wl.workout_date, wl.status, wl.completion_percent, wd.title from workout_logs wl left join workout_days wd on wd.id=wl.workout_day_id order by wl.workout_date',
+    exercises: 'select name, category, primary_muscle, secondary_muscles, equipment, difficulty from exercises order by name',
+  };
+  return toCsv(db.prepare(q[type]).all());
+}
+
+// Import a JSON backup. Mode 'replace' wipes the backed-up tables first.
+export function importBackup(data: any, mode: 'merge' | 'replace' = 'merge') {
+  if (!dbReady()) return { ok: true, demo: true };
+  if (!data || typeof data !== 'object' || !data.tables) throw new Error('Backup non valido');
+  const db = getDb();
+  const tx = db.transaction(() => {
+    db.pragma('foreign_keys=OFF');
+    if (mode === 'replace') { for (const t of [...BACKUP_TABLES].reverse()) { try { db.prepare('delete from ' + t).run(); } catch { /* skip */ } } }
+    for (const t of BACKUP_TABLES) {
+      const rows: any[] = data.tables[t] || [];
+      for (const row of rows) {
+        const cols = Object.keys(row);
+        if (cols.length === 0) continue;
+        const sql = 'insert or replace into ' + t + ' (' + cols.join(',') + ') values (' + cols.map(() => '?').join(',') + ')';
+        try { db.prepare(sql).run(...cols.map((c) => row[c])); } catch { /* skip incompatible row */ }
+      }
+    }
+    db.pragma('foreign_keys=ON');
+  });
+  tx();
   return { ok: true };
 }
 

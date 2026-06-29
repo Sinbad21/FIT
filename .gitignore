@@ -3,3 +3,7 @@ node_modules
 .env*.local
 data/*.sqlite
 data/*.sqlite-*
+tsconfig.tsbuildinfo
+
+certs/
+.env.local

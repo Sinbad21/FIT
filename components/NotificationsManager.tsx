@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { PushSubscriptionPanel } from '@/components/PushSubscriptionPanel';
 
 export function NotificationsManager({ notifications }: { notifications: any[] }) {
   const router = useRouter();
@@ -34,8 +35,8 @@ export function NotificationsManager({ notifications }: { notifications: any[] }
       <section className="glass-card rounded-[1.6rem] p-4">
         <p className="font-black">Permesso browser: {perm}</p>
         <button onClick={ask} className="mt-3 min-h-11 w-full rounded-2xl bg-slate-950 font-black text-white">Abilita notifiche</button>
-        <p className="mt-2 text-xs text-slate-500">Nota: i promemoria programmati lato server (Web Push) richiedono ancora chiavi VAPID e uno scheduler: prossimo step.</p>
       </section>
+      <PushSubscriptionPanel />
       <button onClick={add} className="min-h-11 w-full rounded-2xl bg-emerald-500 font-black text-white">+ Promemoria</button>
       {list.map((n) => (
         <article key={n.id} className="glass-card rounded-[1.5rem] p-4">
