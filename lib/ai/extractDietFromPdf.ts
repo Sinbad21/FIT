@@ -2,6 +2,7 @@ import { z } from 'zod';
 import { aiJson, aiAvailable } from './provider';
 import { DIET_PDF_SYSTEM, dietPdfUser } from './prompts';
 import { extractDietRows, type ExtractedDietMeal } from '@/lib/pdf';
+import { enrichRows } from '@/lib/foods';
 
 const rowSchema = z.object({
   day: z.string().default('tutti'),
@@ -29,9 +30,11 @@ export async function extractDietFromPdf(text: string): Promise<DietExtractResul
     const raw = await aiJson(DIET_PDF_SYSTEM, dietPdfUser(clean));
     const parsed = responseSchema.safeParse(raw);
     if (parsed.success && parsed.data.rows.length > 0) {
-      return { rows: parsed.data.rows as ExtractedDietMeal[], provider: 'ai' };
+      // Riempie eventuali macro/kcal mancanti anche sull'output AI.
+      return { rows: enrichRows(parsed.data.rows) as ExtractedDietMeal[], provider: 'ai' };
     }
   }
 
-  return { rows: extractDietRows(clean), provider: 'local-heuristic' };
+  // Rule-based + stima nutrizionale dei valori mancanti.
+  return { rows: enrichRows(extractDietRows(clean)), provider: 'local-heuristic' };
 }
