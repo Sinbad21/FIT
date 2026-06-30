@@ -10,3 +10,26 @@ button,input,textarea,select{font:inherit} button,a{-webkit-tap-highlight-color:
 .safe-bottom{padding-bottom:calc(5.5rem + var(--safe-bottom))}
 .glass-card{border:1px solid rgba(148,163,184,.22);background:rgba(255,255,255,.86);backdrop-filter:blur(18px)}
 .dark-card{background:linear-gradient(145deg,#0f172a,#111827 65%,#052e16)}
+
+/* Rimuove le frecce su/giù dai campi numerici (antiestetiche) */
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button{-webkit-appearance:none;margin:0}
+input[type=number]{-moz-appearance:textfield;appearance:textfield}
+
+/* Pulsanti modernizzati: micro-interazioni coerenti su tutta l'app */
+button{transition:transform .12s ease,box-shadow .2s ease,filter .2s ease,background-color .2s ease;cursor:pointer}
+button:not(:disabled):hover{filter:brightness(1.06)}
+button:not(:disabled):active{transform:scale(.97)}
+button:disabled{opacity:.55;cursor:not-allowed}
+button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:2px solid #10b981;outline-offset:2px}
+/* Ombra morbida automatica per i pulsanti pieni (CTA colorate) */
+button[class*="bg-emerald"],button[class*="bg-cyan"],button[class*="bg-slate-950"],button[class*="bg-rose-5"],button[class*="bg-amber-5"]{box-shadow:0 8px 20px -8px rgba(15,23,42,.45)}
+/* Input/select più morbidi al focus */
+input,select,textarea{transition:border-color .15s ease,box-shadow .15s ease}
+input:focus,select:focus,textarea:focus{border-color:#34d399;box-shadow:0 0 0 3px rgba(16,185,129,.15);outline:none}
+
+@media print{
+  .no-print{display:none !important}
+  body{background:#fff}
+  .glass-card{box-shadow:none;border-color:#e2e8f0;background:#fff;backdrop-filter:none}
+}
