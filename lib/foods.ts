@@ -65,6 +65,27 @@ export const FOODS: Record<string, FoodInfo> = {
   'noci': { kcal: 654, prot: 15, carb: 14, fat: 65, defaultGrams: 30 },
   'burro darachidi': { kcal: 588, prot: 25, carb: 20, fat: 50, defaultGrams: 20 },
   'avocado': { kcal: 160, prot: 2, carb: 9, fat: 15, defaultGrams: 100 },
+  // Alimenti frequenti nei piani (kcal spesso già nel PDF; qui per le macro)
+  'budino proteico': { kcal: 88, prot: 10, carb: 8, fat: 1.5, defaultGrams: 170 },
+  'drink proteico': { kcal: 60, prot: 10, carb: 3, fat: 1, defaultGrams: 250 },
+  'hamburger magro': { kcal: 180, prot: 20, carb: 0, fat: 11 },
+  'hamburger': { kcal: 250, prot: 18, carb: 1, fat: 19 },
+  'macinato magro': { kcal: 170, prot: 21, carb: 0, fat: 9 },
+  'macinato': { kcal: 200, prot: 19, carb: 0, fat: 14 },
+  'bistecca': { kcal: 150, prot: 26, carb: 0, fat: 5 },
+  'salsiccia': { kcal: 250, prot: 16, carb: 1, fat: 20 },
+  'fesa di tacchino': { kcal: 108, prot: 22, carb: 1, fat: 1.5 },
+  'pesce bianco': { kcal: 90, prot: 18, carb: 0, fat: 1.5 },
+  'pesce': { kcal: 100, prot: 19, carb: 0, fat: 2 },
+  'piadina': { kcal: 310, prot: 8, carb: 47, fat: 9 },
+  'lasagna': { kcal: 135, prot: 7, carb: 12, fat: 6 },
+  'pesto': { kcal: 450, prot: 5, carb: 6, fat: 45, defaultGrams: 20 },
+  'sugo': { kcal: 50, prot: 1.5, carb: 6, fat: 2, defaultGrams: 80 },
+  'brioche': { kcal: 350, prot: 7, carb: 50, fat: 13, defaultGrams: 70 },
+  'cappuccino': { kcal: 40, prot: 2, carb: 4, fat: 1.5, defaultGrams: 150 },
+  'frutta secca': { kcal: 600, prot: 18, carb: 16, fat: 54, defaultGrams: 20 },
+  'frutto': { kcal: 60, prot: 0.8, carb: 14, fat: 0.3, defaultGrams: 150 },
+  'mozzarella light': { kcal: 160, prot: 19, carb: 1, fat: 9 },
   // Dolci / vari
   'miele': { kcal: 304, prot: 0.3, carb: 82, fat: 0, defaultGrams: 15 },
   'marmellata': { kcal: 250, prot: 0.5, carb: 60, fat: 0, defaultGrams: 20 },
@@ -84,12 +105,14 @@ export function matchFood(name: string): FoodInfo | null {
 }
 
 // Estrae i grammi da una stringa quantità tipo "100 g" / "30g" / "180 ml".
+// Richiede un'unità di peso esplicita: "1 media"/"3 pezzi" NON sono grammi
+// (sono conteggi) e restituiscono 0, così scatta il defaultGrams dell'alimento.
 export function gramsFromText(qty: string): number {
-  const m = (qty || '').match(/(\d+[.,]?\d*)\s*(g|gr|grammi|ml)?/i);
+  const m = (qty || '').match(/(\d+[.,]?\d*)\s*(kg|g|gr|grammi|ml|l)\b/i);
   if (!m) return 0;
   const n = Number(m[1].replace(',', '.')) || 0;
-  const unit = (m[2] || '').toLowerCase();
-  return unit === '' || unit.startsWith('g') || unit.startsWith('ml') ? n : 0;
+  const u = m[2].toLowerCase();
+  return u === 'kg' || u === 'l' ? n * 1000 : n;
 }
 
 export type EnrichableRow = { food?: string; name?: string; quantity?: string; calories?: number; proteinG?: number; carbsG?: number; fatG?: number; notes?: string };
