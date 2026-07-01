@@ -43,9 +43,9 @@ export function PlanSelector() {
     <div className="glass-card rounded-[1.6rem] p-4">
       <div className="flex items-center justify-between gap-2">
         <div>
-          <p className="text-xs font-black uppercase tracking-[.18em] text-cyan-600">Scheda attiva</p>
+          <p className="text-xs font-black uppercase tracking-[.18em] text-blue-700">Scheda attiva</p>
           <h3 className="mt-1 text-lg font-black">{active ? active.name : 'Nessuna scheda attiva'}</h3>
-          {active ? <p className="text-sm text-slate-600">{active.dayCount} giorni · {active.goal || 'obiettivo libero'}</p> : <p className="text-sm text-rose-600">Seleziona una scheda per vedere l&apos;allenamento di oggi.</p>}
+          {active ? <p className="text-sm text-slate-600">{active.dayCount} giorni · {active.goal || 'obiettivo libero'}</p> : <p className="text-sm text-red-600">Seleziona una scheda per vedere l&apos;allenamento di oggi.</p>}
         </div>
         <button onClick={() => setOpen((v) => !v)} className="min-h-11 rounded-2xl bg-slate-950 px-4 font-black text-white">{open ? 'Chiudi' : 'Cambia'}</button>
       </div>
@@ -60,11 +60,11 @@ export function PlanSelector() {
               </div>
               <div className="flex shrink-0 gap-2">
                 {p.active ? (
-                  <span className="rounded-xl bg-emerald-500 px-3 py-2 text-xs font-black text-white">Attiva</span>
+                  <span className="rounded-xl bg-emerald-600 px-3 py-2 text-xs font-black text-white">Attiva</span>
                 ) : (
-                  <button disabled={busy} onClick={() => activate(p.id)} className="rounded-xl bg-cyan-500 px-3 py-2 text-xs font-black text-white">Attiva</button>
+                  <button disabled={busy} onClick={() => activate(p.id)} className="rounded-xl bg-blue-600 px-3 py-2 text-xs font-black text-white">Attiva</button>
                 )}
-                <button disabled={busy} onClick={() => remove(p.id)} className="rounded-xl bg-rose-100 px-3 py-2 text-xs font-black text-rose-600">Elimina</button>
+                <button disabled={busy} onClick={() => remove(p.id)} className="rounded-xl bg-red-50 px-3 py-2 text-xs font-black text-red-600">Elimina</button>
               </div>
             </li>
           ))}

@@ -82,10 +82,10 @@ export function PushSubscriptionPanel() {
       <p className="font-black">Notifiche push: <span className={state === 'on' ? 'text-emerald-600' : 'text-slate-600'}>{label}</span></p>
       {state === 'on' ? <p className="text-xs text-slate-500">{count} dispositivo/i registrati.</p> : null}
 
-      {state === 'off' ? <button disabled={busy} onClick={enable} className="mt-3 min-h-11 w-full rounded-2xl bg-emerald-500 font-black text-white">Attiva notifiche push</button> : null}
+      {state === 'off' ? <button disabled={busy} onClick={enable} className="mt-3 min-h-11 w-full rounded-2xl bg-emerald-600 font-black text-white">Attiva notifiche push</button> : null}
       {state === 'on' ? (
         <div className="mt-3 grid grid-cols-2 gap-2">
-          <button disabled={busy} onClick={test} className="min-h-11 rounded-2xl bg-cyan-500 font-black text-white">Invia prova</button>
+          <button disabled={busy} onClick={test} className="min-h-11 rounded-2xl bg-blue-600 font-black text-white">Invia prova</button>
           <button disabled={busy} onClick={disable} className="min-h-11 rounded-2xl bg-slate-200 font-black text-slate-700">Disattiva</button>
         </div>
       ) : null}

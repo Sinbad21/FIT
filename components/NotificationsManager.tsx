@@ -37,7 +37,7 @@ export function NotificationsManager({ notifications }: { notifications: any[] }
         <button onClick={ask} className="mt-3 min-h-11 w-full rounded-2xl bg-slate-950 font-black text-white">Abilita notifiche</button>
       </section>
       <PushSubscriptionPanel />
-      <button onClick={add} className="min-h-11 w-full rounded-2xl bg-emerald-500 font-black text-white">+ Promemoria</button>
+      <button onClick={add} className="min-h-11 w-full rounded-2xl bg-emerald-600 font-black text-white">+ Promemoria</button>
       {list.map((n) => (
         <article key={n.id} className="glass-card rounded-[1.5rem] p-4">
           <div className="flex items-center justify-between gap-2">
@@ -49,7 +49,7 @@ export function NotificationsManager({ notifications }: { notifications: any[] }
             <label>Frequenza<input defaultValue={n.frequency} onBlur={(e) => patch(n, { frequency: e.target.value })} className="mt-1 min-h-10 w-full rounded-lg border border-slate-200 px-2" /></label>
           </div>
           <input defaultValue={n.body} placeholder="Testo" onBlur={(e) => patch(n, { body: e.target.value })} className="mt-2 min-h-10 w-full rounded-lg border border-slate-200 px-2 text-sm" />
-          <button onClick={() => remove(n.id)} className="mt-2 rounded-lg bg-rose-100 px-3 py-1 text-xs font-black text-rose-600">Elimina</button>
+          <button onClick={() => remove(n.id)} className="mt-2 rounded-lg bg-red-50 px-3 py-1 text-xs font-black text-red-600">Elimina</button>
         </article>
       ))}
     </div>

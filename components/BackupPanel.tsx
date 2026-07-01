@@ -35,17 +35,17 @@ export function BackupPanel() {
 
       <div className="mt-3 grid grid-cols-2 gap-2">
         <a href="/api/backup/export" className="min-h-11 rounded-2xl bg-slate-950 px-3 text-center font-black leading-[2.75rem] text-white">Export JSON</a>
-        <a href="/api/backup/export?csv=meals" className="min-h-11 rounded-2xl bg-cyan-100 px-3 text-center font-black leading-[2.75rem] text-cyan-700">CSV pasti</a>
-        <a href="/api/backup/export?csv=weight" className="min-h-11 rounded-2xl bg-cyan-100 px-3 text-center font-black leading-[2.75rem] text-cyan-700">CSV peso</a>
-        <a href="/api/backup/export?csv=workouts" className="min-h-11 rounded-2xl bg-cyan-100 px-3 text-center font-black leading-[2.75rem] text-cyan-700">CSV allenamenti</a>
-        <a href="/api/backup/export?csv=exercises" className="min-h-11 rounded-2xl bg-cyan-100 px-3 text-center font-black leading-[2.75rem] text-cyan-700 col-span-2">CSV esercizi</a>
+        <a href="/api/backup/export?csv=meals" className="min-h-11 rounded-2xl bg-blue-50 px-3 text-center font-black leading-[2.75rem] text-blue-700">CSV pasti</a>
+        <a href="/api/backup/export?csv=weight" className="min-h-11 rounded-2xl bg-blue-50 px-3 text-center font-black leading-[2.75rem] text-blue-700">CSV peso</a>
+        <a href="/api/backup/export?csv=workouts" className="min-h-11 rounded-2xl bg-blue-50 px-3 text-center font-black leading-[2.75rem] text-blue-700">CSV allenamenti</a>
+        <a href="/api/backup/export?csv=exercises" className="min-h-11 rounded-2xl bg-blue-50 px-3 text-center font-black leading-[2.75rem] text-blue-700 col-span-2">CSV esercizi</a>
       </div>
 
       <div className="mt-4 space-y-2">
         <input ref={fileRef} type="file" accept="application/json" className="w-full text-sm" />
         <div className="grid grid-cols-2 gap-2">
-          <button disabled={busy} onClick={() => onPick('merge')} className="min-h-11 rounded-2xl bg-emerald-500 font-black text-white">Importa (unisci)</button>
-          <button disabled={busy} onClick={() => onPick('replace')} className="min-h-11 rounded-2xl bg-rose-500 font-black text-white">Importa (sostituisci)</button>
+          <button disabled={busy} onClick={() => onPick('merge')} className="min-h-11 rounded-2xl bg-emerald-600 font-black text-white">Importa (unisci)</button>
+          <button disabled={busy} onClick={() => onPick('replace')} className="min-h-11 rounded-2xl bg-red-600 font-black text-white">Importa (sostituisci)</button>
         </div>
       </div>
       {msg ? <p className="mt-2 text-sm font-bold text-slate-700">{msg}</p> : null}

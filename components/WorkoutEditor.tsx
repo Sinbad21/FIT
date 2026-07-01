@@ -31,7 +31,7 @@ export function WorkoutEditor({ initialDays, exercises }: { initialDays: any[]; 
     <div className="space-y-4">
       <div className="flex flex-wrap gap-2">
         <button onClick={addDay} disabled={busy} className="min-h-11 rounded-2xl bg-slate-950 px-4 font-black text-white">+ Giorno</button>
-        <button onClick={duplicate} disabled={busy} className="min-h-11 rounded-2xl bg-emerald-500 px-4 font-black text-white">Duplica scheda</button>
+        <button onClick={duplicate} disabled={busy} className="min-h-11 rounded-2xl bg-emerald-600 px-4 font-black text-white">Duplica scheda</button>
       </div>
       {days.length === 0 ? <p className="glass-card rounded-[1.5rem] p-4 text-slate-600">Nessun giorno. Aggiungine uno o genera una scheda.</p> : null}
       {days.map((day) => (
@@ -41,7 +41,7 @@ export function WorkoutEditor({ initialDays, exercises }: { initialDays: any[]; 
             <select defaultValue={day.day_of_week} onChange={(e) => patchDay(day.id, { dayOfWeek: Number(e.target.value) })} className="min-h-11 rounded-xl border border-slate-200 px-2">
               {DAYS.map((d, i) => <option key={i} value={i}>{d}</option>)}
             </select>
-            <button onClick={() => removeDay(day.id)} className="min-h-11 rounded-xl bg-rose-100 px-3 font-black text-rose-600">Elimina</button>
+            <button onClick={() => removeDay(day.id)} className="min-h-11 rounded-xl bg-red-50 px-3 font-black text-red-600">Elimina</button>
           </div>
           <input defaultValue={day.focus || ''} placeholder="Focus (es. Spinta)" onBlur={(e) => patchDay(day.id, { focus: e.target.value })} className="mt-2 min-h-11 w-full rounded-xl border border-slate-200 px-3 text-sm" />
           <div className="mt-3 space-y-2">
@@ -49,7 +49,7 @@ export function WorkoutEditor({ initialDays, exercises }: { initialDays: any[]; 
               <div key={ex.workoutExerciseId} className="rounded-2xl bg-slate-50 p-3">
                 <div className="flex items-center justify-between gap-2">
                   <p className="font-black">{ex.name} <span className="text-xs font-bold text-slate-500">{ex.primaryMuscle}</span></p>
-                  <button onClick={() => removeEx(ex.workoutExerciseId)} className="rounded-lg bg-rose-100 px-2 py-1 text-xs font-black text-rose-600">x</button>
+                  <button onClick={() => removeEx(ex.workoutExerciseId)} className="rounded-lg bg-red-50 px-2 py-1 text-xs font-black text-red-600">x</button>
                 </div>
                 <div className="mt-2 grid grid-cols-3 gap-2 text-xs">
                   <label>Serie<input type="number" defaultValue={ex.sets} onBlur={(e) => patchEx(ex.workoutExerciseId, { sets: Number(e.target.value) })} className="mt-1 min-h-10 w-full rounded-lg border border-slate-200 px-2" /></label>

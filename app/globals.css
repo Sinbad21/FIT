@@ -21,12 +21,12 @@ button{transition:transform .12s ease,box-shadow .2s ease,filter .2s ease,backgr
 button:not(:disabled):hover{filter:brightness(1.06)}
 button:not(:disabled):active{transform:scale(.97)}
 button:disabled{opacity:.55;cursor:not-allowed}
-button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:2px solid #10b981;outline-offset:2px}
+button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:2px solid #059669;outline-offset:2px}
 /* Ombra morbida automatica per i pulsanti pieni (CTA colorate) */
-button[class*="bg-emerald"],button[class*="bg-cyan"],button[class*="bg-slate-950"],button[class*="bg-rose-5"],button[class*="bg-amber-5"]{box-shadow:0 8px 20px -8px rgba(15,23,42,.45)}
+button[class*="bg-emerald"],button[class*="bg-blue"],button[class*="bg-slate-950"],button[class*="bg-red-6"],button[class*="bg-amber-6"]{box-shadow:0 8px 20px -8px rgba(15,23,42,.45)}
 /* Input/select più morbidi al focus */
 input,select,textarea{transition:border-color .15s ease,box-shadow .15s ease}
-input:focus,select:focus,textarea:focus{border-color:#34d399;box-shadow:0 0 0 3px rgba(16,185,129,.15);outline:none}
+input:focus,select:focus,textarea:focus{border-color:#10b981;box-shadow:0 0 0 3px rgba(5,150,105,.15);outline:none}
 
 @media print{
   .no-print{display:none !important}

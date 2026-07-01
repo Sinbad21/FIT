@@ -31,8 +31,8 @@ export function AppLock() {
         <p className="mt-1 text-sm text-slate-400">Inserisci il PIN per sbloccare</p>
         <input autoFocus value={value} onChange={(e) => { setValue(e.target.value); setErr(false); }} onKeyDown={(e) => { if (e.key === 'Enter') submit(); }}
           type="password" inputMode="numeric" className="mt-4 min-h-12 w-full rounded-2xl border border-slate-700 bg-slate-900 px-4 text-center text-xl font-black text-white" />
-        {err ? <p className="mt-2 text-sm font-bold text-rose-400">PIN errato</p> : null}
-        <button onClick={submit} className="mt-4 min-h-12 w-full rounded-2xl bg-emerald-500 font-black text-white">Sblocca</button>
+        {err ? <p className="mt-2 text-sm font-bold text-red-400">PIN errato</p> : null}
+        <button onClick={submit} className="mt-4 min-h-12 w-full rounded-2xl bg-emerald-600 font-black text-white">Sblocca</button>
       </div>
     </div>
   );
