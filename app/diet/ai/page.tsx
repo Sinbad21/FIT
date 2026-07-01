@@ -36,7 +36,7 @@ export default function AiMealPage() {
         <textarea value={text} onChange={(e) => setText(e.target.value)} className="min-h-32 w-full rounded-2xl border border-slate-200 p-4" />
         <button onClick={parse} disabled={busy} className="min-h-12 w-full rounded-2xl bg-slate-950 font-black text-white">Interpreta frase</button>
       </section>
-      {msg ? <p className="rounded-2xl bg-amber-100 px-4 py-3 text-sm font-bold text-amber-700">{msg}</p> : null}
+      {msg ? <p className="rounded-2xl bg-amber-50 px-4 py-3 text-sm font-bold text-amber-800">{msg}</p> : null}
       {rows.length > 0 ? (
         <div className="space-y-3">
           {rows.map((row, i) => (
@@ -52,11 +52,11 @@ export default function AiMealPage() {
               </div>
               <div className="mt-2 flex items-center justify-between">
                 <span className={'text-xs font-bold ' + (row.needsConfirmation ? 'text-orange-600' : 'text-emerald-600')}>Conf. {Math.round((row.confidence || 0) * 100)}% {row.needsConfirmation ? '· verifica' : ''}</span>
-                <button onClick={() => removeRow(i)} className="rounded-lg bg-rose-100 px-2 py-1 text-xs font-black text-rose-600">Rimuovi</button>
+                <button onClick={() => removeRow(i)} className="rounded-lg bg-red-50 px-2 py-1 text-xs font-black text-red-600">Rimuovi</button>
               </div>
             </article>
           ))}
-          <button onClick={save} disabled={busy} className="min-h-12 w-full rounded-2xl bg-emerald-500 font-black text-white">Conferma e salva</button>
+          <button onClick={save} disabled={busy} className="min-h-12 w-full rounded-2xl bg-emerald-600 font-black text-white">Conferma e salva</button>
         </div>
       ) : null}
     </div>

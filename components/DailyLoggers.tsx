@@ -18,8 +18,8 @@ export function WaterTracker({ current, target }: { current: number; target: num
       <h3 className="font-black">Acqua</h3>
       <p className="mt-1 text-2xl font-black">{value}<span className="text-slate-400">/{target}</span> <span className="text-sm text-slate-500">L</span></p>
       <div className="mt-3 grid grid-cols-3 gap-2">
-        <button onClick={() => add(0.25)} className="min-h-11 rounded-2xl bg-cyan-500 font-black text-white">+250 ml</button>
-        <button onClick={() => add(0.5)} className="min-h-11 rounded-2xl bg-cyan-600 font-black text-white">+500 ml</button>
+        <button onClick={() => add(0.25)} className="min-h-11 rounded-2xl bg-blue-600 font-black text-white">+250 ml</button>
+        <button onClick={() => add(0.5)} className="min-h-11 rounded-2xl bg-blue-700 font-black text-white">+500 ml</button>
         <button onClick={() => add(-0.25)} className="min-h-11 rounded-2xl bg-slate-200 font-black text-slate-700">-250</button>
       </div>
     </article>
@@ -57,7 +57,7 @@ export function MetricLogger() {
         <label className="text-xs font-bold text-slate-500">Sonno h<input value={sleep} onChange={(e) => setSleep(e.target.value)} inputMode="decimal" className="mt-1 min-h-11 w-full rounded-xl border border-slate-200 px-3" /></label>
         <label className="text-xs font-bold text-slate-500">Passi<input value={steps} onChange={(e) => setSteps(e.target.value)} inputMode="numeric" className="mt-1 min-h-11 w-full rounded-xl border border-slate-200 px-3" /></label>
       </div>
-      <button onClick={save} className="mt-3 min-h-11 w-full rounded-2xl bg-emerald-500 font-black text-white">Salva</button>
+      <button onClick={save} className="mt-3 min-h-11 w-full rounded-2xl bg-emerald-600 font-black text-white">Salva</button>
       {msg ? <p className="mt-2 text-sm font-bold text-emerald-600">{msg}</p> : null}
     </article>
   );

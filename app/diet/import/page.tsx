@@ -44,7 +44,7 @@ export default function DietImportPage() {
         <input name="pdf" type="file" accept="application/pdf" className="w-full rounded-2xl border border-dashed border-slate-300 bg-white p-5" />
         <button disabled={busy} className="min-h-12 w-full rounded-2xl bg-slate-950 font-black text-white">{busy ? 'Analizzo...' : 'Analizza PDF'}</button>
       </form>
-      {msg ? <p className="rounded-2xl bg-amber-100 px-4 py-3 text-sm font-bold text-amber-700">{msg}</p> : null}
+      {msg ? <p className="rounded-2xl bg-amber-50 px-4 py-3 text-sm font-bold text-amber-800">{msg}</p> : null}
       {rows.length > 0 ? (
         <div className="space-y-3">
           <div className="flex items-center justify-between">
@@ -64,11 +64,11 @@ export default function DietImportPage() {
               </div>
               <div className="mt-2 flex items-center justify-between">
                 <span className="text-xs font-bold text-orange-600">Conf. {Math.round((row.confidence || 0) * 100)}%</span>
-                <button onClick={() => removeRow(i)} className="rounded-lg bg-rose-100 px-2 py-1 text-xs font-black text-rose-600">Rimuovi</button>
+                <button onClick={() => removeRow(i)} className="rounded-lg bg-red-50 px-2 py-1 text-xs font-black text-red-600">Rimuovi</button>
               </div>
             </article>
           ))}
-          <button onClick={save} disabled={busy} className="min-h-12 w-full rounded-2xl bg-emerald-500 font-black text-white">Salva dieta</button>
+          <button onClick={save} disabled={busy} className="min-h-12 w-full rounded-2xl bg-emerald-600 font-black text-white">Salva dieta</button>
         </div>
       ) : null}
     </div>

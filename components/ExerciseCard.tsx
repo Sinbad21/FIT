@@ -35,7 +35,7 @@ export function ExerciseCard({ exercise }: { exercise: WorkoutExercise }) {
             <p className="text-xs font-black uppercase tracking-[.18em] text-emerald-600">{exercise.primaryMuscle}</p>
             <h3 className="mt-1 text-lg font-black">{exercise.name}</h3>
           </div>
-          <button onClick={toggle} disabled={saving} className={'min-h-11 rounded-2xl px-4 text-sm font-black text-white ' + (done ? 'bg-emerald-500' : 'bg-slate-950')}>{done ? 'Fatto' : 'Completa'}</button>
+          <button onClick={toggle} disabled={saving} className={'min-h-11 rounded-2xl px-4 text-sm font-black text-white ' + (done ? 'bg-emerald-600' : 'bg-slate-950')}>{done ? 'Fatto' : 'Completa'}</button>
         </div>
         <div className="mt-3 grid grid-cols-3 gap-2 text-center text-sm">
           <div className="rounded-2xl bg-slate-100 p-2"><b>{exercise.sets}</b><br />serie</div>
@@ -51,7 +51,7 @@ export function ExerciseCard({ exercise }: { exercise: WorkoutExercise }) {
               <label className="text-xs font-bold text-slate-500">Reps<input value={reps} onChange={(e) => setReps(e.target.value)} className="mt-1 min-h-11 w-full rounded-xl border border-slate-200 px-3" /></label>
               <label className="text-xs font-bold text-slate-500">RPE<input value={rpe} onChange={(e) => setRpe(e.target.value)} inputMode="decimal" className="mt-1 min-h-11 w-full rounded-xl border border-slate-200 px-3" /></label>
             </div>
-            <button onClick={saveLog} disabled={saving} className="min-h-11 w-full rounded-2xl bg-emerald-500 font-black text-white">Salva log</button>
+            <button onClick={saveLog} disabled={saving} className="min-h-11 w-full rounded-2xl bg-emerald-600 font-black text-white">Salva log</button>
           </div>
         ) : null}
       </div>

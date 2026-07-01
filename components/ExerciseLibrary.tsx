@@ -61,7 +61,7 @@ export function ExerciseLibrary({ initial }: { initial: Exercise[] }) {
     <div className="space-y-4">
       <div className="flex flex-wrap gap-2">
         <input value={q} onChange={(e) => setQ(e.target.value)} placeholder="Cerca esercizio…" className="min-h-11 flex-1 rounded-2xl border border-slate-200 px-4 font-bold" />
-        <button onClick={() => { setEditing({ ...empty }); setErr(''); }} className="min-h-11 rounded-2xl bg-emerald-500 px-4 font-black text-white">+ Nuovo</button>
+        <button onClick={() => { setEditing({ ...empty }); setErr(''); }} className="min-h-11 rounded-2xl bg-emerald-600 px-4 font-black text-white">+ Nuovo</button>
       </div>
       <div className="grid grid-cols-3 gap-2 text-sm">
         <select value={muscle} onChange={(e) => setMuscle(e.target.value)} className="min-h-11 rounded-xl border border-slate-200 px-2"><option value="">Muscolo</option>{muscles.map((m) => <option key={m} value={m}>{m}</option>)}</select>
@@ -80,8 +80,8 @@ export function ExerciseLibrary({ initial }: { initial: Exercise[] }) {
               <h3 className="font-black">{e.name}</h3>
               <p className="text-sm text-slate-600">{e.primaryMuscle}{e.equipment ? ' · ' + e.equipment : ''}{e.difficulty ? ' · ' + e.difficulty : ''}</p>
               <div className="mt-3 flex gap-2">
-                <button onClick={() => { setEditing(e); setErr(''); }} className="rounded-xl bg-cyan-100 px-3 py-2 text-xs font-black text-cyan-700">Modifica</button>
-                <button onClick={() => remove(e.id)} className="rounded-xl bg-rose-100 px-3 py-2 text-xs font-black text-rose-600">Elimina</button>
+                <button onClick={() => { setEditing(e); setErr(''); }} className="rounded-xl bg-blue-50 px-3 py-2 text-xs font-black text-blue-700">Modifica</button>
+                <button onClick={() => remove(e.id)} className="rounded-xl bg-red-50 px-3 py-2 text-xs font-black text-red-600">Elimina</button>
               </div>
             </div>
           </article>
@@ -114,10 +114,10 @@ export function ExerciseLibrary({ initial }: { initial: Exercise[] }) {
               </div>
               <label className="block">Prompt AI immagine (futuro)<input value={editing.imagePrompt || ''} onChange={(e) => set('imagePrompt', e.target.value)} className="mt-1 min-h-11 w-full rounded-xl border border-slate-200 px-3" /></label>
             </div>
-            {err ? <p className="mt-2 text-sm font-bold text-rose-600">{err}</p> : null}
+            {err ? <p className="mt-2 text-sm font-bold text-red-600">{err}</p> : null}
             <div className="mt-4 grid grid-cols-2 gap-2">
               <button onClick={() => setEditing(null)} className="min-h-11 rounded-2xl bg-slate-100 font-black">Annulla</button>
-              <button disabled={busy} onClick={save} className="min-h-11 rounded-2xl bg-emerald-500 font-black text-white">{busy ? '…' : 'Salva'}</button>
+              <button disabled={busy} onClick={save} className="min-h-11 rounded-2xl bg-emerald-600 font-black text-white">{busy ? '…' : 'Salva'}</button>
             </div>
           </div>
         </div>

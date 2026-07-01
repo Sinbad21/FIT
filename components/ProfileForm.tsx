@@ -34,7 +34,7 @@ export function ProfileForm({ profile }: { profile: any }) {
         <h3 className="font-black">Preferenze</h3>
         {Field('foodPreferences', 'Preferenze alimentari')}{Field('foodsToAvoid', 'Alimenti da evitare')}{Field('allergies', 'Allergie/intolleranze')}{Field('availableEquipment', 'Attrezzatura disponibile')}
       </section>
-      <button onClick={save} className="min-h-12 w-full rounded-2xl bg-emerald-500 font-black text-white">Salva profilo</button>
+      <button onClick={save} className="min-h-12 w-full rounded-2xl bg-emerald-600 font-black text-white">Salva profilo</button>
       {msg ? <p className="text-center text-sm font-bold text-emerald-600">{msg}</p> : null}
     </div>
   );

@@ -59,12 +59,12 @@ export function MealCard({ meal }: { meal: Meal }) {
     <article className="glass-card rounded-[1.6rem] p-4 shadow-sm">
       <div className="flex items-start justify-between gap-3">
         <div>
-          <p className="text-xs font-black uppercase tracking-[.18em] text-cyan-600">{meal.mealType}</p>
+          <p className="text-xs font-black uppercase tracking-[.18em] text-blue-700">{meal.mealType}</p>
           <h3 className="mt-1 text-lg font-black">{meal.name}</h3>
           <p className="text-sm text-slate-600">{meal.quantity} {meal.unit}</p>
-          {changed && meal.plannedName && meal.plannedName !== meal.name ? <p className="text-xs text-amber-600">era: {meal.plannedName}</p> : null}
+          {changed && meal.plannedName && meal.plannedName !== meal.name ? <p className="text-xs text-amber-800">era: {meal.plannedName}</p> : null}
         </div>
-        <span className={`rounded-full px-3 py-1 text-xs font-black ${status === 'mangiato' ? 'bg-emerald-100 text-emerald-700' : status === 'saltato' ? 'bg-rose-100 text-rose-700' : changed ? 'bg-amber-100 text-amber-700' : 'bg-slate-100'}`}>{status}</span>
+        <span className={`rounded-full px-3 py-1 text-xs font-black ${status === 'mangiato' ? 'bg-emerald-100 text-emerald-700' : status === 'saltato' ? 'bg-red-50 text-red-700' : changed ? 'bg-amber-50 text-amber-800' : 'bg-slate-100'}`}>{status}</span>
       </div>
       <div className="mt-3 grid grid-cols-4 gap-2 text-center text-xs">
         <div className="rounded-2xl bg-slate-100 p-2"><b>{Math.round(meal.calories)}</b><br />kcal</div>
@@ -73,10 +73,10 @@ export function MealCard({ meal }: { meal: Meal }) {
         <div className="rounded-2xl bg-slate-100 p-2"><b>{Math.round(meal.fatG)}</b><br />fat</div>
       </div>
       <div className="mt-4 grid grid-cols-2 gap-2">
-        <button onClick={() => update('mangiato')} className="min-h-11 rounded-2xl bg-emerald-500 font-black text-white">Mangiato</button>
+        <button onClick={() => update('mangiato')} className="min-h-11 rounded-2xl bg-emerald-600 font-black text-white">Mangiato</button>
         <button onClick={() => update('saltato')} className="min-h-11 rounded-2xl bg-slate-950 font-black text-white">Saltato</button>
-        <button onClick={() => setMode('edit')} className="min-h-11 rounded-2xl bg-cyan-100 font-black text-cyan-700">Modifica</button>
-        <button onClick={openReplace} className="min-h-11 rounded-2xl bg-amber-100 font-black text-amber-700">Sostituisci</button>
+        <button onClick={() => setMode('edit')} className="min-h-11 rounded-2xl bg-blue-50 font-black text-blue-700">Modifica</button>
+        <button onClick={openReplace} className="min-h-11 rounded-2xl bg-amber-50 font-black text-amber-800">Sostituisci</button>
       </div>
 
       {mode ? (
@@ -100,7 +100,7 @@ export function MealCard({ meal }: { meal: Meal }) {
             </div>
             <div className="mt-4 grid grid-cols-2 gap-2">
               <button onClick={() => setMode(null)} className="min-h-11 rounded-2xl bg-slate-100 font-black">Annulla</button>
-              <button disabled={busy} onClick={save} className="min-h-11 rounded-2xl bg-emerald-500 font-black text-white">{busy ? '...' : 'Salva'}</button>
+              <button disabled={busy} onClick={save} className="min-h-11 rounded-2xl bg-emerald-600 font-black text-white">{busy ? '...' : 'Salva'}</button>
             </div>
           </div>
         </div>

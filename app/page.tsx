@@ -17,7 +17,7 @@ export default function DashboardPage() {
         <h3 className="mt-1 text-2xl font-black">{d.workoutTitle}</h3>
         <div className="mt-5 grid grid-cols-2 gap-3 text-sm sm:grid-cols-4">
           <div className="rounded-2xl bg-white/10 p-3"><Dumbbell className="mb-2 h-5 w-5 text-emerald-300" />{d.exercisesCompleted}/{d.exercisesTotal}<br />esercizi</div>
-          <div className="rounded-2xl bg-white/10 p-3"><Salad className="mb-2 h-5 w-5 text-cyan-300" />{d.mealsConfirmed}/{d.mealsTotal}<br />pasti</div>
+          <div className="rounded-2xl bg-white/10 p-3"><Salad className="mb-2 h-5 w-5 text-blue-300" />{d.mealsConfirmed}/{d.mealsTotal}<br />pasti</div>
           <div className="rounded-2xl bg-white/10 p-3"><Droplets className="mb-2 h-5 w-5 text-blue-300" />{d.waterL}/{d.waterTargetL} L<br />acqua</div>
           <div className="rounded-2xl bg-white/10 p-3"><Scale className="mb-2 h-5 w-5 text-orange-300" />{d.bodyWeightKg ?? '-'} kg<br />peso</div>
         </div>
@@ -32,7 +32,7 @@ export default function DashboardPage() {
       <WaterTracker current={d.waterL} target={d.waterTargetL} />
       <section className="grid gap-3 sm:grid-cols-2">
         <Link href="/workout" className="rounded-[1.6rem] bg-slate-950 p-5 font-black text-white shadow-soft">Vai all'allenamento di oggi</Link>
-        <Link href="/diet" className="rounded-[1.6rem] bg-emerald-500 p-5 font-black text-white shadow-soft">Conferma i pasti di oggi</Link>
+        <Link href="/diet" className="rounded-[1.6rem] bg-emerald-600 p-5 font-black text-white shadow-soft">Conferma i pasti di oggi</Link>
       </section>
     </div>
   );
