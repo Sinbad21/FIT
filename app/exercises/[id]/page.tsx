@@ -19,11 +19,11 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
             {exercise.secondaryMuscles ? <p><b>Secondari:</b> {exercise.secondaryMuscles}</p> : null}
             <p><b>Attrezzatura:</b> {exercise.equipment || '—'}</p>
             <p><b>Difficoltà:</b> {exercise.difficulty || '—'}</p>
-            {exercise.technicalNotes ? <p className="leading-6 text-slate-600">{exercise.technicalNotes}</p> : null}
-            {exercise.imageSource ? <p className="text-xs text-slate-400">Fonte: {exercise.imageSource}{exercise.imageLicense ? ' · ' + exercise.imageLicense : ''}</p> : null}
+            {exercise.technicalNotes ? <p className="leading-6 text-gray-600">{exercise.technicalNotes}</p> : null}
+            {exercise.imageSource ? <p className="text-xs text-gray-400">Fonte: {exercise.imageSource}{exercise.imageLicense ? ' · ' + exercise.imageLicense : ''}</p> : null}
           </div>
         </article>
-      ) : <p className="glass-card rounded-[1.5rem] p-4 text-slate-600">Esercizio non trovato.</p>}
+      ) : <p className="glass-card rounded-[1.5rem] p-4 text-gray-600">Esercizio non trovato.</p>}
     </div>
   );
 }

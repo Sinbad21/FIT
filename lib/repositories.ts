@@ -28,14 +28,39 @@ export function updateProfile(input: any) {
   const num = (v: any) => (v === '' || v === undefined || v === null ? null : Number(v));
   const fields = ['name','age','height_cm','weight_kg','sex','goal','target_weight_kg','activity_level','training_days_per_week','daily_calorie_target','protein_target_g','carbs_target_g','fat_target_g','water_target_l','food_preferences','foods_to_avoid','allergies','available_equipment','training_level'];
   const values: any = { name: input.name, age: num(input.age), height_cm: num(input.heightCm), weight_kg: num(input.weightKg), sex: input.sex, goal: input.goal, target_weight_kg: num(input.targetWeightKg), activity_level: input.activityLevel, training_days_per_week: num(input.trainingDaysPerWeek), daily_calorie_target: num(input.dailyCalorieTarget) ?? 0, protein_target_g: num(input.proteinTargetG) ?? 0, carbs_target_g: num(input.carbsTargetG) ?? 0, fat_target_g: num(input.fatTargetG) ?? 0, water_target_l: num(input.waterTargetL) ?? 0, food_preferences: input.foodPreferences, foods_to_avoid: input.foodsToAvoid, allergies: input.allergies, available_equipment: input.availableEquipment, training_level: input.trainingLevel };
+  let id: string;
   if (current) {
     const setSql = fields.map((f) => f + '=@' + f).join(', ');
     db.prepare('update user_profile set ' + setSql + ', updated_at=current_timestamp where id=@id').run({ ...values, id: current.id });
-    return { ok: true, id: current.id };
+    id = current.id;
+  } else {
+    id = randomUUID();
+    db.prepare('insert into user_profile (id,' + fields.join(',') + ') values (@id,' + fields.map((f) => '@' + f).join(',') + ')').run({ ...values, id });
   }
-  const id = randomUUID();
-  db.prepare('insert into user_profile (id,' + fields.join(',') + ') values (@id,' + fields.map((f) => '@' + f).join(',') + ')').run({ ...values, id });
+  setAppSetting('onboarding_completed', '1');
   return { ok: true, id };
+}
+
+// ---------------- App settings (generic key/value store) ----------------
+export function getAppSetting(key: string): string | null {
+  if (!dbReady()) return null;
+  const r: any = getDb().prepare('select value from app_settings where key=?').get(key);
+  return r ? r.value : null;
+}
+
+export function setAppSetting(key: string, value: string) {
+  getDb().prepare('insert into app_settings (id,key,value) values (@id,@key,@value) on conflict(key) do update set value=excluded.value, updated_at=current_timestamp').run({ id: randomUUID(), key, value });
+}
+
+export function isOnboardingCompleted(): boolean {
+  if (!dbReady()) return true;
+  return getAppSetting('onboarding_completed') !== '0';
+}
+
+export function skipOnboarding() {
+  if (!dbReady()) return { ok: true, demo: true };
+  setAppSetting('onboarding_completed', '1');
+  return { ok: true };
 }
 
 // ---------------- Workout (read) ----------------

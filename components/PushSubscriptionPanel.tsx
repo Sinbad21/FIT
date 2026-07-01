@@ -79,21 +79,21 @@ export function PushSubscriptionPanel() {
 
   return (
     <section className="glass-card rounded-[1.6rem] p-4">
-      <p className="font-black">Notifiche push: <span className={state === 'on' ? 'text-emerald-600' : 'text-slate-600'}>{label}</span></p>
-      {state === 'on' ? <p className="text-xs text-slate-500">{count} dispositivo/i registrati.</p> : null}
+      <p className="font-black">Notifiche push: <span className={state === 'on' ? 'text-green-600' : 'text-gray-600'}>{label}</span></p>
+      {state === 'on' ? <p className="text-xs text-gray-500">{count} dispositivo/i registrati.</p> : null}
 
-      {state === 'off' ? <button disabled={busy} onClick={enable} className="mt-3 min-h-11 w-full rounded-2xl bg-emerald-600 font-black text-white">Attiva notifiche push</button> : null}
+      {state === 'off' ? <button disabled={busy} onClick={enable} className="mt-3 min-h-11 w-full rounded-2xl bg-green-600 font-black text-white">Attiva notifiche push</button> : null}
       {state === 'on' ? (
         <div className="mt-3 grid grid-cols-2 gap-2">
           <button disabled={busy} onClick={test} className="min-h-11 rounded-2xl bg-blue-600 font-black text-white">Invia prova</button>
-          <button disabled={busy} onClick={disable} className="min-h-11 rounded-2xl bg-slate-200 font-black text-slate-700">Disattiva</button>
+          <button disabled={busy} onClick={disable} className="min-h-11 rounded-2xl bg-gray-200 font-black text-gray-700">Disattiva</button>
         </div>
       ) : null}
 
-      {state === 'not-configured' ? <p className="mt-2 text-xs text-slate-500">Genera le chiavi con <code>npm run vapid:generate</code> e aggiungile a <code>.env.local</code>.</p> : null}
-      {state === 'unsupported' ? <p className="mt-2 text-xs text-slate-500">Su iPhone serve iOS 16.4+ e l&apos;app aggiunta alla schermata Home (PWA).</p> : null}
-      {msg ? <p className="mt-2 text-sm font-bold text-slate-700">{msg}</p> : null}
-      <p className="mt-2 text-xs text-slate-400">I promemoria programmati vengono inviati dallo scheduler server: <code>npm run push:run</code> (via cron).</p>
+      {state === 'not-configured' ? <p className="mt-2 text-xs text-gray-500">Genera le chiavi con <code>npm run vapid:generate</code> e aggiungile a <code>.env.local</code>.</p> : null}
+      {state === 'unsupported' ? <p className="mt-2 text-xs text-gray-500">Su iPhone serve iOS 16.4+ e l&apos;app aggiunta alla schermata Home (PWA).</p> : null}
+      {msg ? <p className="mt-2 text-sm font-bold text-gray-700">{msg}</p> : null}
+      <p className="mt-2 text-xs text-gray-400">I promemoria programmati vengono inviati dallo scheduler server: <code>npm run push:run</code> (via cron).</p>
     </section>
   );
 }

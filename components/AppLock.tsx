@@ -25,14 +25,14 @@ export function AppLock() {
   }
 
   return (
-    <div className="fixed inset-0 z-[100] flex items-center justify-center bg-slate-950 p-6">
+    <div className="fixed inset-0 z-[100] flex items-center justify-center bg-gray-950 p-6">
       <div className="w-full max-w-xs text-center">
         <h2 className="text-2xl font-black text-white">FitControl</h2>
-        <p className="mt-1 text-sm text-slate-400">Inserisci il PIN per sbloccare</p>
+        <p className="mt-1 text-sm text-gray-400">Inserisci il PIN per sbloccare</p>
         <input autoFocus value={value} onChange={(e) => { setValue(e.target.value); setErr(false); }} onKeyDown={(e) => { if (e.key === 'Enter') submit(); }}
-          type="password" inputMode="numeric" className="mt-4 min-h-12 w-full rounded-2xl border border-slate-700 bg-slate-900 px-4 text-center text-xl font-black text-white" />
+          type="password" inputMode="numeric" className="mt-4 min-h-12 w-full rounded-2xl border border-gray-700 bg-gray-900 px-4 text-center text-xl font-black text-white" />
         {err ? <p className="mt-2 text-sm font-bold text-red-400">PIN errato</p> : null}
-        <button onClick={submit} className="mt-4 min-h-12 w-full rounded-2xl bg-emerald-600 font-black text-white">Sblocca</button>
+        <button onClick={submit} className="mt-4 min-h-12 w-full rounded-2xl bg-green-600 font-black text-white">Sblocca</button>
       </div>
     </div>
   );

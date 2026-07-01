@@ -60,16 +60,16 @@ export function ExerciseLibrary({ initial }: { initial: Exercise[] }) {
   return (
     <div className="space-y-4">
       <div className="flex flex-wrap gap-2">
-        <input value={q} onChange={(e) => setQ(e.target.value)} placeholder="Cerca esercizio…" className="min-h-11 flex-1 rounded-2xl border border-slate-200 px-4 font-bold" />
-        <button onClick={() => { setEditing({ ...empty }); setErr(''); }} className="min-h-11 rounded-2xl bg-emerald-600 px-4 font-black text-white">+ Nuovo</button>
+        <input value={q} onChange={(e) => setQ(e.target.value)} placeholder="Cerca esercizio…" className="min-h-11 flex-1 rounded-2xl border border-gray-200 px-4 font-bold" />
+        <button onClick={() => { setEditing({ ...empty }); setErr(''); }} className="min-h-11 rounded-2xl bg-green-600 px-4 font-black text-white">+ Nuovo</button>
       </div>
       <div className="grid grid-cols-3 gap-2 text-sm">
-        <select value={muscle} onChange={(e) => setMuscle(e.target.value)} className="min-h-11 rounded-xl border border-slate-200 px-2"><option value="">Muscolo</option>{muscles.map((m) => <option key={m} value={m}>{m}</option>)}</select>
-        <select value={equipment} onChange={(e) => setEquipment(e.target.value)} className="min-h-11 rounded-xl border border-slate-200 px-2"><option value="">Attrezzo</option>{equipments.map((m) => <option key={m} value={m}>{m}</option>)}</select>
-        <select value={difficulty} onChange={(e) => setDifficulty(e.target.value)} className="min-h-11 rounded-xl border border-slate-200 px-2"><option value="">Difficoltà</option>{difficulties.map((m) => <option key={m} value={m}>{m}</option>)}</select>
+        <select value={muscle} onChange={(e) => setMuscle(e.target.value)} className="min-h-11 rounded-xl border border-gray-200 px-2"><option value="">Muscolo</option>{muscles.map((m) => <option key={m} value={m}>{m}</option>)}</select>
+        <select value={equipment} onChange={(e) => setEquipment(e.target.value)} className="min-h-11 rounded-xl border border-gray-200 px-2"><option value="">Attrezzo</option>{equipments.map((m) => <option key={m} value={m}>{m}</option>)}</select>
+        <select value={difficulty} onChange={(e) => setDifficulty(e.target.value)} className="min-h-11 rounded-xl border border-gray-200 px-2"><option value="">Difficoltà</option>{difficulties.map((m) => <option key={m} value={m}>{m}</option>)}</select>
       </div>
 
-      <p className="text-xs text-slate-500">{filtered.length} esercizi · gli esercizi qui disponibili compaiono nel menu &quot;Aggiungi esercizio&quot; della scheda settimanale.</p>
+      <p className="text-xs text-gray-500">{filtered.length} esercizi · gli esercizi qui disponibili compaiono nel menu &quot;Aggiungi esercizio&quot; della scheda settimanale.</p>
 
       <div className="grid gap-3 sm:grid-cols-2">
         {filtered.map((e) => (
@@ -78,15 +78,15 @@ export function ExerciseLibrary({ initial }: { initial: Exercise[] }) {
             <img src={e.imageUrl || '/exercise-placeholder.svg'} alt={e.name} className="aspect-video w-full object-cover" onError={(ev) => { (ev.target as HTMLImageElement).src = '/exercise-placeholder.svg'; }} />
             <div className="p-4">
               <h3 className="font-black">{e.name}</h3>
-              <p className="text-sm text-slate-600">{e.primaryMuscle}{e.equipment ? ' · ' + e.equipment : ''}{e.difficulty ? ' · ' + e.difficulty : ''}</p>
+              <p className="text-sm text-gray-600">{e.primaryMuscle}{e.equipment ? ' · ' + e.equipment : ''}{e.difficulty ? ' · ' + e.difficulty : ''}</p>
               <div className="mt-3 flex gap-2">
                 <button onClick={() => { setEditing(e); setErr(''); }} className="rounded-xl bg-blue-50 px-3 py-2 text-xs font-black text-blue-700">Modifica</button>
-                <button onClick={() => remove(e.id)} className="rounded-xl bg-red-50 px-3 py-2 text-xs font-black text-red-600">Elimina</button>
+                <button onClick={() => remove(e.id)} className="rounded-xl bg-red-50 px-3 py-2 text-xs font-black text-red-500">Elimina</button>
               </div>
             </div>
           </article>
         ))}
-        {filtered.length === 0 ? <p className="glass-card rounded-[1.5rem] p-4 text-slate-600">Nessun esercizio trovato.</p> : null}
+        {filtered.length === 0 ? <p className="glass-card rounded-[1.5rem] p-4 text-gray-600">Nessun esercizio trovato.</p> : null}
       </div>
 
       {editing ? (
@@ -94,30 +94,30 @@ export function ExerciseLibrary({ initial }: { initial: Exercise[] }) {
           <div className="max-h-[90vh] w-full max-w-md overflow-y-auto rounded-[1.6rem] bg-white p-4 shadow-xl" onClick={(e) => e.stopPropagation()}>
             <h4 className="text-lg font-black">{editing.id ? 'Modifica esercizio' : 'Nuovo esercizio'}</h4>
             <div className="mt-3 space-y-2 text-sm">
-              <label className="block">Nome*<input value={editing.name || ''} onChange={(e) => set('name', e.target.value)} className="mt-1 min-h-11 w-full rounded-xl border border-slate-200 px-3 font-bold" /></label>
+              <label className="block">Nome*<input value={editing.name || ''} onChange={(e) => set('name', e.target.value)} className="mt-1 min-h-11 w-full rounded-xl border border-gray-200 px-3 font-bold" /></label>
               <div className="grid grid-cols-2 gap-2">
-                <label className="block">Muscolo<input value={editing.primaryMuscle || ''} onChange={(e) => set('primaryMuscle', e.target.value)} className="mt-1 min-h-11 w-full rounded-xl border border-slate-200 px-3" /></label>
-                <label className="block">Attrezzo<input value={editing.equipment || ''} onChange={(e) => set('equipment', e.target.value)} className="mt-1 min-h-11 w-full rounded-xl border border-slate-200 px-3" /></label>
+                <label className="block">Muscolo<input value={editing.primaryMuscle || ''} onChange={(e) => set('primaryMuscle', e.target.value)} className="mt-1 min-h-11 w-full rounded-xl border border-gray-200 px-3" /></label>
+                <label className="block">Attrezzo<input value={editing.equipment || ''} onChange={(e) => set('equipment', e.target.value)} className="mt-1 min-h-11 w-full rounded-xl border border-gray-200 px-3" /></label>
               </div>
               <div className="grid grid-cols-2 gap-2">
                 <label className="block">Difficoltà
-                  <select value={editing.difficulty || 'intermedio'} onChange={(e) => set('difficulty', e.target.value)} className="mt-1 min-h-11 w-full rounded-xl border border-slate-200 px-2">
+                  <select value={editing.difficulty || 'intermedio'} onChange={(e) => set('difficulty', e.target.value)} className="mt-1 min-h-11 w-full rounded-xl border border-gray-200 px-2">
                     {['principiante', 'intermedio', 'avanzato'].map((d) => <option key={d} value={d}>{d}</option>)}
                   </select></label>
-                <label className="block">Muscoli sec.<input value={editing.secondaryMuscles || ''} onChange={(e) => set('secondaryMuscles', e.target.value)} className="mt-1 min-h-11 w-full rounded-xl border border-slate-200 px-3" /></label>
+                <label className="block">Muscoli sec.<input value={editing.secondaryMuscles || ''} onChange={(e) => set('secondaryMuscles', e.target.value)} className="mt-1 min-h-11 w-full rounded-xl border border-gray-200 px-3" /></label>
               </div>
-              <label className="block">Note tecniche<textarea value={editing.technicalNotes || ''} onChange={(e) => set('technicalNotes', e.target.value)} className="mt-1 w-full rounded-xl border border-slate-200 px-3 py-2" rows={2} /></label>
-              <label className="block">URL immagine<input value={editing.imageUrl || ''} onChange={(e) => set('imageUrl', e.target.value)} placeholder="/exercises/nome.svg o https://…" className="mt-1 min-h-11 w-full rounded-xl border border-slate-200 px-3" /></label>
+              <label className="block">Note tecniche<textarea value={editing.technicalNotes || ''} onChange={(e) => set('technicalNotes', e.target.value)} className="mt-1 w-full rounded-xl border border-gray-200 px-3 py-2" rows={2} /></label>
+              <label className="block">URL immagine<input value={editing.imageUrl || ''} onChange={(e) => set('imageUrl', e.target.value)} placeholder="/exercises/nome.svg o https://…" className="mt-1 min-h-11 w-full rounded-xl border border-gray-200 px-3" /></label>
               <div className="grid grid-cols-2 gap-2">
-                <label className="block">Fonte img<input value={editing.imageSource || ''} onChange={(e) => set('imageSource', e.target.value)} className="mt-1 min-h-11 w-full rounded-xl border border-slate-200 px-3" /></label>
-                <label className="block">Licenza img<input value={editing.imageLicense || ''} onChange={(e) => set('imageLicense', e.target.value)} className="mt-1 min-h-11 w-full rounded-xl border border-slate-200 px-3" /></label>
+                <label className="block">Fonte img<input value={editing.imageSource || ''} onChange={(e) => set('imageSource', e.target.value)} className="mt-1 min-h-11 w-full rounded-xl border border-gray-200 px-3" /></label>
+                <label className="block">Licenza img<input value={editing.imageLicense || ''} onChange={(e) => set('imageLicense', e.target.value)} className="mt-1 min-h-11 w-full rounded-xl border border-gray-200 px-3" /></label>
               </div>
-              <label className="block">Prompt AI immagine (futuro)<input value={editing.imagePrompt || ''} onChange={(e) => set('imagePrompt', e.target.value)} className="mt-1 min-h-11 w-full rounded-xl border border-slate-200 px-3" /></label>
+              <label className="block">Prompt AI immagine (futuro)<input value={editing.imagePrompt || ''} onChange={(e) => set('imagePrompt', e.target.value)} className="mt-1 min-h-11 w-full rounded-xl border border-gray-200 px-3" /></label>
             </div>
-            {err ? <p className="mt-2 text-sm font-bold text-red-600">{err}</p> : null}
+            {err ? <p className="mt-2 text-sm font-bold text-red-500">{err}</p> : null}
             <div className="mt-4 grid grid-cols-2 gap-2">
-              <button onClick={() => setEditing(null)} className="min-h-11 rounded-2xl bg-slate-100 font-black">Annulla</button>
-              <button disabled={busy} onClick={save} className="min-h-11 rounded-2xl bg-emerald-600 font-black text-white">{busy ? '…' : 'Salva'}</button>
+              <button onClick={() => setEditing(null)} className="min-h-11 rounded-2xl bg-gray-100 font-black">Annulla</button>
+              <button disabled={busy} onClick={save} className="min-h-11 rounded-2xl bg-green-600 font-black text-white">{busy ? '…' : 'Salva'}</button>
             </div>
           </div>
         </div>

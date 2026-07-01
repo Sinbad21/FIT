@@ -5,11 +5,11 @@
 :root{color-scheme:light;--safe-bottom:env(safe-area-inset-bottom)}
 *{box-sizing:border-box}
 html{min-height:100%;background:#f8fafc;-webkit-text-size-adjust:100%}
-body{min-height:100%;margin:0;background:radial-gradient(circle at top left,rgba(34,197,94,.18),transparent 28rem),linear-gradient(180deg,#f8fafc,#eef2f7);color:#0f172a;font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+body{min-height:100%;margin:0;background:radial-gradient(circle at top left,rgba(34,197,94,.18),transparent 28rem),linear-gradient(180deg,#f8fafc,#eef2f7);color:#111827;font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
 button,input,textarea,select{font:inherit} button,a{-webkit-tap-highlight-color:transparent}
 .safe-bottom{padding-bottom:calc(5.5rem + var(--safe-bottom))}
-.glass-card{border:1px solid rgba(148,163,184,.22);background:rgba(255,255,255,.86);backdrop-filter:blur(18px)}
-.dark-card{background:linear-gradient(145deg,#0f172a,#111827 65%,#052e16)}
+.glass-card{border:1px solid rgba(107,114,128,.18);background:rgba(255,255,255,.86);backdrop-filter:blur(18px)}
+.dark-card{background:linear-gradient(145deg,#111827,#1f2937 65%,#052e16)}
 
 /* Rimuove le frecce su/giù dai campi numerici (antiestetiche) */
 input[type=number]::-webkit-inner-spin-button,
@@ -21,15 +21,15 @@ button{transition:transform .12s ease,box-shadow .2s ease,filter .2s ease,backgr
 button:not(:disabled):hover{filter:brightness(1.06)}
 button:not(:disabled):active{transform:scale(.97)}
 button:disabled{opacity:.55;cursor:not-allowed}
-button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:2px solid #059669;outline-offset:2px}
+button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:2px solid #16a34a;outline-offset:2px}
 /* Ombra morbida automatica per i pulsanti pieni (CTA colorate) */
-button[class*="bg-emerald"],button[class*="bg-blue"],button[class*="bg-slate-950"],button[class*="bg-red-6"],button[class*="bg-amber-6"]{box-shadow:0 8px 20px -8px rgba(15,23,42,.45)}
+button[class*="bg-green"],button[class*="bg-blue"],button[class*="bg-gray-950"],button[class*="bg-red-5"],button[class*="bg-orange-5"]{box-shadow:0 8px 20px -8px rgba(17,24,39,.45)}
 /* Input/select più morbidi al focus */
 input,select,textarea{transition:border-color .15s ease,box-shadow .15s ease}
-input:focus,select:focus,textarea:focus{border-color:#10b981;box-shadow:0 0 0 3px rgba(5,150,105,.15);outline:none}
+input:focus,select:focus,textarea:focus{border-color:#22c55e;box-shadow:0 0 0 3px rgba(34,197,94,.15);outline:none}
 
 @media print{
   .no-print{display:none !important}
   body{background:#fff}
-  .glass-card{box-shadow:none;border-color:#e2e8f0;background:#fff;backdrop-filter:none}
+  .glass-card{box-shadow:none;border-color:#e5e7eb;background:#fff;backdrop-filter:none}
 }
