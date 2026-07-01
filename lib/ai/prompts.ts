@@ -30,3 +30,14 @@ Non aggiungere testo fuori dal JSON.`;
 export function dietPdfUser(text: string) {
   return `Testo PDF:\n${text.slice(0, 12000)}`;
 }
+
+export const NUTRITION_SYSTEM = `Sei un nutrizionista sportivo. Dato il profilo fisico e l'obiettivo di una persona, calcola target nutrizionali giornalieri realistici. Restituisci SOLO JSON:
+{"dailyCalorieTarget":number,"proteinTargetG":number,"carbsTargetG":number,"fatTargetG":number,"waterTargetL":number,"note":string}
+- Parti dal metabolismo basale (formula di Mifflin-St Jeor), applica il fattore di attività e un aggiustamento coerente con l'obiettivo (surplus per massa, deficit per definizione, mantenimento altrimenti).
+- proteinTargetG tra 1.6 e 2.4 g per kg di peso corporeo in base a obiettivo e attività.
+- note: una frase breve in italiano (max 160 caratteri) che spiega il ragionamento in modo semplice, come se parlasse un personal trainer amichevole.
+Non aggiungere testo fuori dal JSON.`;
+
+export function nutritionUser(input: { sex?: string; age?: number | string; heightCm?: number | string; weightKg?: number | string; targetWeightKg?: number | string; goal?: string; activityLevel?: string }) {
+  return `Sesso: ${input.sex || '-'}\nEtà: ${input.age || '-'}\nAltezza: ${input.heightCm || '-'} cm\nPeso attuale: ${input.weightKg || '-'} kg\nPeso target: ${input.targetWeightKg || '-'} kg\nObiettivo: ${input.goal || '-'}\nLivello attività: ${input.activityLevel || '-'}`;
+}
