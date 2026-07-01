@@ -1,13 +1,15 @@
 import Link from 'next/link';
+import { redirect } from 'next/navigation';
 import { Dumbbell, Salad, Droplets, Scale } from 'lucide-react';
 import { MetricCard } from '@/components/MetricCard';
 import { PageHeader } from '@/components/PageHeader';
 import { WaterTracker } from '@/components/DailyLoggers';
-import { getDashboard } from '@/lib/repositories';
+import { getDashboard, isOnboardingCompleted } from '@/lib/repositories';
 
 export const dynamic = 'force-dynamic';
 
 export default function DashboardPage() {
+  if (!isOnboardingCompleted()) redirect('/onboarding');
   const d = getDashboard();
   return (
     <div className="space-y-5">
