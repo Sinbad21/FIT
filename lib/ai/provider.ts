@@ -43,6 +43,9 @@ export function getAISettingsForClient() {
 // Prefix match (non ancorato a "-"/fine stringa) per coprire anche i numeri di
 // versione puntati (es. gpt-5.5, gpt-5.5-mini) che le versioni precedenti non intercettavano.
 const REASONING_MODEL_RE = /^(o1|o3|o4|gpt-5)/i;
+export function isReasoningModel(model: string): boolean {
+  return REASONING_MODEL_RE.test(String(model || '').trim());
+}
 
 async function chatCompletion(system: string, user: string): Promise<{ ok: boolean; content?: string; status?: number; errorText?: string }> {
   const { apiKey, model, baseUrl } = getProviderConfig();
