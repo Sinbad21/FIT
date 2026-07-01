@@ -38,9 +38,11 @@ export function getAISettingsForClient() {
   return { provider, model, baseUrl, hasKey: Boolean(apiKey), keyPreview: apiKey ? '••••' + apiKey.slice(-4) : '' };
 }
 
-// I modelli "reasoning" (o1/o3/o4-mini, gpt-5*) rifiutano con un 400 qualunque
-// temperature diversa dal default: per questi la omettiamo dalla richiesta.
-const REASONING_MODEL_RE = /^(o1|o3|o4|gpt-5)(-|$)/i;
+// I modelli "reasoning" (o1/o3/o4-mini, gpt-5 e varianti come gpt-5.5, gpt-5-mini...)
+// rifiutano con un 400 qualunque temperature diversa dal default: la omettiamo.
+// Prefix match (non ancorato a "-"/fine stringa) per coprire anche i numeri di
+// versione puntati (es. gpt-5.5, gpt-5.5-mini) che le versioni precedenti non intercettavano.
+const REASONING_MODEL_RE = /^(o1|o3|o4|gpt-5)/i;
 
 async function chatCompletion(system: string, user: string): Promise<{ ok: boolean; content?: string; status?: number; errorText?: string }> {
   const { apiKey, model, baseUrl } = getProviderConfig();
