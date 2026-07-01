@@ -46,27 +46,27 @@ export function OnboardingWizard({ profile }: { profile: any }) {
     <div className="space-y-4">
       <div className="flex items-center justify-between">
         <div className="flex gap-1.5">
-          {STEPS.map((_, i) => <span key={i} className={`h-1.5 w-8 rounded-full ${i <= step ? 'bg-emerald-600' : 'bg-slate-200'}`} />)}
+          {STEPS.map((_, i) => <span key={i} className={`h-1.5 w-8 rounded-full ${i <= step ? 'bg-green-600' : 'bg-gray-200'}`} />)}
         </div>
-        <button onClick={skip} disabled={busy} className="text-xs font-bold text-slate-500 underline underline-offset-2">Salta per ora</button>
+        <button onClick={skip} disabled={busy} className="text-xs font-bold text-gray-500 underline underline-offset-2">Salta per ora</button>
       </div>
       <section className="glass-card rounded-[1.6rem] p-4">
         <h3 className="mb-3 font-black">{STEPS[step].title}</h3>
         <div className="grid grid-cols-2 gap-3">
           {STEPS[step].fields.map((k) => (
             <label key={k} className="block">
-              <span className="text-xs font-bold text-slate-500">{LABELS[k]}</span>
-              <input type={NUMBER_FIELDS.has(k) ? 'number' : 'text'} value={(f as any)[k]} onChange={(e) => set(k, e.target.value)} className="mt-1 min-h-11 w-full rounded-xl border border-slate-200 px-3" />
+              <span className="text-xs font-bold text-gray-500">{LABELS[k]}</span>
+              <input type={NUMBER_FIELDS.has(k) ? 'number' : 'text'} value={(f as any)[k]} onChange={(e) => set(k, e.target.value)} className="mt-1 min-h-11 w-full rounded-xl border border-gray-200 px-3" />
             </label>
           ))}
         </div>
       </section>
       <div className="grid grid-cols-2 gap-2">
-        <button onClick={() => setStep((s) => Math.max(0, s - 1))} disabled={step === 0 || busy} className="min-h-12 rounded-2xl bg-slate-100 font-black disabled:opacity-40">Indietro</button>
+        <button onClick={() => setStep((s) => Math.max(0, s - 1))} disabled={step === 0 || busy} className="min-h-12 rounded-2xl bg-gray-100 font-black disabled:opacity-40">Indietro</button>
         {last ? (
-          <button onClick={finish} disabled={busy} className="min-h-12 rounded-2xl bg-emerald-600 font-black text-white">{busy ? '…' : 'Inizia'}</button>
+          <button onClick={finish} disabled={busy} className="min-h-12 rounded-2xl bg-green-600 font-black text-white">{busy ? '…' : 'Inizia'}</button>
         ) : (
-          <button onClick={() => setStep((s) => Math.min(STEPS.length - 1, s + 1))} disabled={busy} className="min-h-12 rounded-2xl bg-slate-950 font-black text-white">Avanti</button>
+          <button onClick={() => setStep((s) => Math.min(STEPS.length - 1, s + 1))} disabled={busy} className="min-h-12 rounded-2xl bg-gray-950 font-black text-white">Avanti</button>
         )}
       </div>
     </div>

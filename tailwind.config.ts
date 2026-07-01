@@ -1,3 +1,3 @@
 import type { Config } from 'tailwindcss';
-const config: Config = { content: ['./app/**/*.{ts,tsx}', './components/**/*.{ts,tsx}', './lib/**/*.{ts,tsx}'], theme: { extend: { colors: { ink:'#0f172a', accent:'#059669' }, boxShadow: { soft:'0 20px 60px rgba(15,23,42,.14)' } } }, plugins: [] };
+const config: Config = { content: ['./app/**/*.{ts,tsx}', './components/**/*.{ts,tsx}', './lib/**/*.{ts,tsx}'], theme: { extend: { colors: { ink:'#111827', accent:'#22c55e' }, boxShadow: { soft:'0 20px 60px rgba(17,24,39,.14)' } } }, plugins: [] };
 export default config;
