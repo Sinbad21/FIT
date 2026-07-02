@@ -1,8 +1,22 @@
 # Asset delle mascotte
 
-Le mascotte sono animazioni **Lottie** (`<id>.json`) riprodotte in loop con
-lottie-web. I file provengono dal set [Noto Animated Emoji di Google]
-(https://googlefonts.github.io/noto-emoji-animation/), licenza Apache 2.0.
+Priorità di caricamento per ogni mascotte: **`<id>.riv`** (Rive) →
+**`img/<id>.png`** (illustrazione, es. render 3D generato con AI) →
+**`<id>.json`** (animazione Lottie, sempre presente come default).
+
+## Illustrazioni 3D (img/)
+
+Metti in `img/` un PNG (o WebP) **con sfondo trasparente**, idealmente
+quadrato ≥512px, chiamato `black-cat.png`, `stickman.png`, `fox.png`,
+`anime.png`, `anime-m.png`. L'app lo anima via CSS (fluttuazione idle,
+saltello con squash al tap). Se accanto c'è anche `<id>-tap.png` (stessa
+mascotte in posa esultante), al tap viene mostrato quello per un attimo.
+
+## Animazioni Lottie (default)
+
+Le Lottie di default (`<id>.json`) provengono dal set [Noto Animated Emoji
+di Google](https://googlefonts.github.io/noto-emoji-animation/), licenza
+Apache 2.0.
 
 - `black-cat.json` — gattina "Kira" (+ `black-cat-tap.json`, reazione occhi a
   cuore riprodotta una volta al tap)

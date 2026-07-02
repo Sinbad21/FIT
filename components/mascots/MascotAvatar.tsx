@@ -3,18 +3,18 @@
 import { useEffect, useRef, useState } from 'react';
 import type { AnimationItem } from 'lottie-web';
 import { useRive, useStateMachineInput } from '@rive-app/react-canvas';
-import { getMascot, type MascotDef, type MascotId } from '@/lib/mascots';
+import { getMascot, tapImgSrc, type MascotDef, type MascotId } from '@/lib/mascots';
 import { useMascot } from '@/hooks/useMascot';
 
-// Verifica una sola volta per sessione se il file .riv esiste in /public/mascots.
-const rivProbes = new Map<string, Promise<boolean>>();
-function probeRiv(src: string): Promise<boolean> {
-  let p = rivProbes.get(src);
+// Verifica una sola volta per sessione se un asset opzionale esiste in /public/mascots.
+const probes = new Map<string, Promise<boolean>>();
+function probeAsset(src: string): Promise<boolean> {
+  let p = probes.get(src);
   if (!p) {
     p = fetch(src, { method: 'HEAD' })
       .then((r) => r.ok && !(r.headers.get('content-type') ?? '').includes('text/html'))
       .catch(() => false);
-    rivProbes.set(src, p);
+    probes.set(src, p);
   }
   return p;
 }
@@ -25,6 +25,41 @@ function RiveMascot({ def, size }: { def: MascotDef; size: number }) {
   return (
     <button type="button" aria-label={`Mascotte ${def.name}`} onClick={() => tap?.fire()} className="block bg-transparent p-0" style={{ width: size, height: size }}>
       <RiveComponent style={{ width: size, height: size }} />
+    </button>
+  );
+}
+
+/** Illustrazione (es. render 3D) animata via CSS: fluttua, e al tap saltella con squash. */
+function ImgMascot({ def, size }: { def: MascotDef; size: number }) {
+  const [reacting, setReacting] = useState(false);
+  const [hasTapImg, setHasTapImg] = useState(false);
+  const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const tapSrc = tapImgSrc(def.imgSrc);
+
+  useEffect(() => {
+    let alive = true;
+    setHasTapImg(false);
+    probeAsset(tapSrc).then((ok) => { if (alive) setHasTapImg(ok); });
+    return () => { alive = false; if (timer.current) clearTimeout(timer.current); };
+  }, [tapSrc]);
+
+  const react = () => {
+    if (timer.current) clearTimeout(timer.current);
+    setReacting(true);
+    timer.current = setTimeout(() => setReacting(false), 900);
+  };
+
+  return (
+    <button type="button" aria-label={`Mascotte ${def.name}`} onClick={react} className={`block bg-transparent p-0 ${reacting ? 'mascot-jump' : 'mascot-float'}`}>
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img
+        src={reacting && hasTapImg ? tapSrc : def.imgSrc}
+        alt=""
+        width={size}
+        height={size}
+        style={{ width: size, height: size, objectFit: 'contain' }}
+        draggable={false}
+      />
     </button>
   );
 }
@@ -87,25 +122,28 @@ function LottieMascot({ def, size }: { def: MascotDef; size: number }) {
 }
 
 /**
- * Mascotte animata e interagibile (tap = reazione). Usa il file Rive se presente
- * in /public/mascots, altrimenti l'animazione Lottie. Senza `id` mostra la
- * mascotte selezionata dall'utente.
+ * Mascotte animata e interagibile (tap = reazione). Priorità degli asset in
+ * /public/mascots: file Rive > illustrazione PNG (render 3D) > animazione
+ * Lottie. Senza `id` mostra la mascotte selezionata dall'utente.
  */
 export function MascotAvatar({ id, size = 56, className }: { id?: MascotId; size?: number; className?: string }) {
   const { mascot: selected } = useMascot();
   const def = id ? getMascot(id) : selected;
-  const [riveOk, setRiveOk] = useState(false);
+  const [renderer, setRenderer] = useState<'rive' | 'img' | 'lottie'>('lottie');
 
   useEffect(() => {
     let alive = true;
-    setRiveOk(false);
-    probeRiv(def.rivSrc).then((ok) => { if (alive) setRiveOk(ok); });
+    setRenderer('lottie');
+    (async () => {
+      if (await probeAsset(def.rivSrc)) { if (alive) setRenderer('rive'); return; }
+      if (await probeAsset(def.imgSrc)) { if (alive) setRenderer('img'); }
+    })();
     return () => { alive = false; };
-  }, [def.rivSrc]);
+  }, [def.rivSrc, def.imgSrc]);
 
   return (
     <span className={className} style={{ display: 'inline-block', width: size, height: size }}>
-      {riveOk ? <RiveMascot def={def} size={size} /> : <LottieMascot def={def} size={size} />}
+      {renderer === 'rive' ? <RiveMascot def={def} size={size} /> : renderer === 'img' ? <ImgMascot def={def} size={size} /> : <LottieMascot def={def} size={size} />}
     </span>
   );
 }
