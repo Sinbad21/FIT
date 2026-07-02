@@ -28,6 +28,23 @@ button[class*="bg-green"],button[class*="bg-blue"],button[class*="bg-gray-950"],
 input,select,textarea{transition:border-color .15s ease,box-shadow .15s ease}
 input:focus,select:focus,textarea:focus{border-color:#22c55e;box-shadow:0 0 0 3px rgba(34,197,94,.15);outline:none}
 
+/* Mascotte: animazioni dei fallback SVG (respiro, blink, coda, saluto, salto) */
+@keyframes mascot-bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-2.5px)}}
+@keyframes mascot-blink{0%,92%,100%{transform:scaleY(1)}95%{transform:scaleY(.08)}}
+@keyframes mascot-sway{0%,100%{transform:rotate(-7deg)}50%{transform:rotate(9deg)}}
+@keyframes mascot-wave{0%,100%{transform:rotate(0)}50%{transform:rotate(-30deg)}}
+@keyframes mascot-sparkle{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.35;transform:scale(.7)}}
+@keyframes mascot-jump{0%{transform:translateY(0)}30%{transform:translateY(-8px) scale(1.05)}55%{transform:translateY(0) scale(.96)}72%{transform:translateY(-3px)}100%{transform:translateY(0)}}
+.mascot-idle{animation:mascot-bob 2.6s ease-in-out infinite;overflow:visible}
+.mascot-blink{animation:mascot-blink 4.2s ease-in-out infinite;transform-box:fill-box;transform-origin:center}
+.mascot-sway{animation:mascot-sway 3s ease-in-out infinite}
+.mascot-wave{animation:mascot-wave 2.2s ease-in-out infinite}
+.mascot-sparkle{animation:mascot-sparkle 2.4s ease-in-out infinite;transform-box:fill-box;transform-origin:center}
+.mascot-jump{animation:mascot-jump .8s ease;transform-origin:32px 60px}
+@media (prefers-reduced-motion:reduce){
+  .mascot-idle,.mascot-blink,.mascot-sway,.mascot-wave,.mascot-sparkle,.mascot-jump{animation:none}
+}
+
 @media print{
   .no-print{display:none !important}
   body{background:#fff}
