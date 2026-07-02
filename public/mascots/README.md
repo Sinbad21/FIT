@@ -5,10 +5,11 @@ viene mostrato automaticamente il fallback SVG animato integrato.
 
 Nomi attesi (vedi `lib/mascots.ts`):
 
-- `black-cat.riv` — gatta nera "Notte"
+- `black-cat.riv` — gatta nera "Kira"
 - `stickman.riv` — stickman "Stick"
-- `fox.riv` — volpe "Kira"
-- `anime.riv` — coach anime "Yui"
+- `fox.riv` — volpe "Kitsune"
+- `anime.riv` — coach anime "Yui" (atletica)
+- `anime-m.riv` — coach anime "Hiro" (muscoloso)
 
 ## Come creare/esportare un file
 

@@ -37,14 +37,18 @@ function BlackCat({ size, reacting }: SvgMascotProps) {
         <path d="M92 102 Q118 96 111 64" stroke="#27272a" strokeWidth="13" fill="none" strokeLinecap="round" />
         <path d="M92 100 Q114 95 109 70" stroke="#52525b" strokeWidth="4" fill="none" strokeLinecap="round" opacity="0.5" />
       </g>
-      {/* corpo + petto + zampe */}
+      {/* corpo + petto + quattro zampe (posteriori ai lati, anteriori al centro) */}
       <ellipse cx="62" cy="96" rx="29" ry="24" fill="url(#nc-fur)" />
       <path d="M62 82 Q74 92 70 112 Q62 118 54 112 Q50 92 62 82 Z" fill="#3f3f46" />
-      <ellipse cx="48" cy="115" rx="10" ry="6.5" fill="#3f3f46" />
-      <ellipse cx="76" cy="115" rx="10" ry="6.5" fill="#3f3f46" />
+      <ellipse cx="37" cy="113.5" rx="11" ry="6.8" fill="#27272a" transform="rotate(-8 37 113.5)" />
+      <ellipse cx="87" cy="113.5" rx="11" ry="6.8" fill="#27272a" transform="rotate(8 87 113.5)" />
+      <ellipse cx="52" cy="116" rx="8.5" ry="6" fill="#3f3f46" />
+      <ellipse cx="72" cy="116" rx="8.5" ry="6" fill="#3f3f46" />
       <g stroke="#18181b" strokeWidth="1.6" strokeLinecap="round">
-        <path d="M45 111.5 L45 116" /><path d="M50.5 111.5 L50.5 116.5" />
-        <path d="M73 111.5 L73 116.5" /><path d="M78.5 111.5 L78.5 116" />
+        <path d="M33 111 L34 115.5" /><path d="M39 110.5 L39.5 115.5" />
+        <path d="M85 110.5 L84.5 115.5" /><path d="M91 111 L90 115.5" />
+        <path d="M49 113 L49 117.5" /><path d="M54.5 113 L54.5 117.5" />
+        <path d="M69.5 113 L69.5 117.5" /><path d="M75 113 L75 117.5" />
       </g>
       {/* orecchie */}
       <path d="M36 32 L39 5 L59 21 Z" fill="url(#nc-fur)" />
@@ -187,14 +191,18 @@ function Fox({ size, reacting }: SvgMascotProps) {
         <path d="M86 106 Q126 102 118 54 Q112 68 100 74 Q110 90 84 100 Z" fill="url(#fx-fur)" />
         <path d="M118 54 Q121 74 106 86 Q101 78 108 68 Z" fill="#fff7ed" />
       </g>
-      {/* corpo + pancia + zampe */}
+      {/* corpo + pancia + quattro zampe (posteriori ai lati, anteriori al centro) */}
       <ellipse cx="60" cy="96" rx="28" ry="23" fill="url(#fx-fur)" />
       <ellipse cx="60" cy="100" rx="14" ry="14" fill="#fff7ed" />
-      <ellipse cx="46" cy="114.5" rx="9.5" ry="6" fill="#c2410c" />
-      <ellipse cx="74" cy="114.5" rx="9.5" ry="6" fill="#c2410c" />
+      <ellipse cx="35" cy="113.5" rx="10.5" ry="6.8" fill="#c2410c" transform="rotate(-8 35 113.5)" />
+      <ellipse cx="85" cy="113.5" rx="10.5" ry="6.8" fill="#c2410c" transform="rotate(8 85 113.5)" />
+      <ellipse cx="50" cy="116" rx="8.5" ry="6" fill="#ea580c" />
+      <ellipse cx="70" cy="116" rx="8.5" ry="6" fill="#ea580c" />
       <g stroke="#7c2d12" strokeWidth="1.6" strokeLinecap="round">
-        <path d="M43 111.5 L43 116" /><path d="M48.5 111.5 L48.5 116.5" />
-        <path d="M71 111.5 L71 116.5" /><path d="M76.5 111.5 L76.5 116" />
+        <path d="M31 111 L32 115.5" /><path d="M37 110.5 L37.5 115.5" />
+        <path d="M83 110.5 L82.5 115.5" /><path d="M89 111 L88 115.5" />
+        <path d="M47 113 L47 117.5" /><path d="M52.5 113 L52.5 117.5" />
+        <path d="M67.5 113 L67.5 117.5" /><path d="M73 113 L73 117.5" />
       </g>
       {/* orecchie */}
       <path d="M34 32 L36 4 L58 20 Z" fill="url(#fx-fur)" />
@@ -268,10 +276,17 @@ function Anime({ size, reacting }: SvgMascotProps) {
         <path d="M92 36 Q110 52 102 88 Q97 93 92 87 Q98 62 86 44 Z" fill="url(#yu-hair)" />
         <path d="M96 52 Q100 68 96 82" stroke="#fbcfe8" strokeWidth="2.5" strokeLinecap="round" fill="none" opacity="0.8" />
       </g>
-      {/* corpo: top sportivo, braccia, pantaloncini, gambe */}
-      <path d="M48 74 Q64 68 80 74 L78 96 Q64 101 50 96 Z" fill="url(#yu-top)" />
+      {/* corpo atletico: crop top, addominali scolpiti, un braccio che flette il bicipite */}
+      <path d="M48 74 Q64 68 80 74 L79 87 Q64 91.5 49 87 Z" fill="url(#yu-top)" />
+      <path d="M49.5 86 Q64 90.5 78.5 86 L78 97 L50 97 Z" fill="#ffe8d6" />
+      <g stroke="#eab89a" strokeWidth="1.6" strokeLinecap="round">
+        <path d="M64 88.5 L64 95" />
+        <path d="M58.5 89 L58 94" /><path d="M69.5 89 L70 94" />
+      </g>
       <path d="M48 74 Q44 82 46 90" stroke="#ffe8d6" strokeWidth="7" strokeLinecap="round" fill="none" />
-      <path d="M80 74 Q84 82 82 90" stroke="#ffe8d6" strokeWidth="7" strokeLinecap="round" fill="none" />
+      <path d="M80 75 Q90 79 89 87" stroke="#ffe8d6" strokeWidth="7" strokeLinecap="round" fill="none" />
+      <path d="M89 87 Q93.5 78 87.5 73.5" stroke="#ffe8d6" strokeWidth="6" strokeLinecap="round" fill="none" />
+      <circle cx="87" cy="72.5" r="4.5" fill="#ffe8d6" />
       <path d="M50 96 L78 96 L76 107 L67 107 L64 99.5 L61 107 L52 107 Z" fill="#1f2937" />
       <path d="M58 107 L57.5 115" stroke="#ffe8d6" strokeWidth="6.5" strokeLinecap="round" />
       <path d="M70 107 L70.5 115" stroke="#ffe8d6" strokeWidth="6.5" strokeLinecap="round" />
@@ -329,9 +344,82 @@ function Anime({ size, reacting }: SvgMascotProps) {
   ));
 }
 
+/** Coach anime "Hiro": chibi muscoloso, capelli a punte, doppio bicipite flesso. */
+function AnimeM({ size, reacting }: SvgMascotProps) {
+  return frame(size, reacting, (
+    <>
+      <defs>
+        <linearGradient id="hi-hair" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stopColor="#818cf8" /><stop offset="1" stopColor="#312e81" />
+        </linearGradient>
+        <radialGradient id="hi-iris" cx="0.35" cy="0.25" r="1">
+          <stop offset="0" stopColor="#7dd3fc" /><stop offset="0.55" stopColor="#0284c7" /><stop offset="1" stopColor="#0c4a6e" />
+        </radialGradient>
+        <linearGradient id="hi-top" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stopColor="#4ade80" /><stop offset="1" stopColor="#15803d" />
+        </linearGradient>
+      </defs>
+      {/* braccia in doppia posa da bicipite (dietro il busto) */}
+      <path d="M48 78 Q34 82 33 90" stroke="#ffe8d6" strokeWidth="9" strokeLinecap="round" fill="none" />
+      <circle cx="39" cy="80.5" r="6" fill="#ffe8d6" />
+      <path d="M33 90 Q28 78 36 72" stroke="#ffe8d6" strokeWidth="8" strokeLinecap="round" fill="none" />
+      <circle cx="37" cy="71" r="5.5" fill="#ffe8d6" />
+      <path d="M80 78 Q94 82 95 90" stroke="#ffe8d6" strokeWidth="9" strokeLinecap="round" fill="none" />
+      <circle cx="89" cy="80.5" r="6" fill="#ffe8d6" />
+      <path d="M95 90 Q100 78 92 72" stroke="#ffe8d6" strokeWidth="8" strokeLinecap="round" fill="none" />
+      <circle cx="91" cy="71" r="5.5" fill="#ffe8d6" />
+      {/* busto largo con canotta e pettorali */}
+      <path d="M46 72 Q64 65 82 72 L80 99 Q64 104 48 99 Z" fill="url(#hi-top)" />
+      <path d="M55 80 Q64 85 73 80" stroke="#15803d" strokeWidth="2" strokeLinecap="round" fill="none" />
+      <path d="M64 86 L64 96" stroke="#15803d" strokeWidth="1.8" strokeLinecap="round" opacity="0.7" />
+      {/* pantaloncini, gambe, scarpe */}
+      <path d="M49 99 L79 99 L77 111 L67.5 111 L64 103 L60.5 111 L51 111 Z" fill="#1f2937" />
+      <path d="M57.5 111 L57 118.5" stroke="#ffe8d6" strokeWidth="7" strokeLinecap="round" />
+      <path d="M70.5 111 L71 118.5" stroke="#ffe8d6" strokeWidth="7" strokeLinecap="round" />
+      <ellipse cx="56.5" cy="121.5" rx="7.5" ry="4" fill="#fff" stroke="#4f46e5" strokeWidth="1.6" />
+      <ellipse cx="71.5" cy="121.5" rx="7.5" ry="4" fill="#fff" stroke="#4f46e5" strokeWidth="1.6" />
+      {/* testa: punte dietro, viso, frangia a punte */}
+      <path d="M64 4 L72 16 L82 8 L84 22 L96 18 L92 32 L100 34 L92 44 Q64 30 36 44 L28 34 L36 32 L32 18 L44 22 L46 8 L56 16 Z" fill="url(#hi-hair)" />
+      <circle cx="64" cy="42" r="24" fill="#ffe8d6" />
+      <path d="M40 44 L45 28 L52 39 L57 25 L64 37 L71 25 L76 39 L83 28 L88 44 Q89 16 64 14 Q39 16 40 44 Z" fill="url(#hi-hair)" />
+      {/* sopracciglia decise */}
+      <path d="M45.5 39 L57 42" stroke="#1f2937" strokeWidth="3" strokeLinecap="round" />
+      <path d="M82.5 39 L71 42" stroke="#1f2937" strokeWidth="3" strokeLinecap="round" />
+      {/* occhi */}
+      {reacting ? (
+        <g stroke="#1f2937" strokeWidth="3.5" strokeLinecap="round" fill="none">
+          <path d="M46 50 Q52 44 58 50" />
+          <path d="M70 50 Q76 44 82 50" />
+        </g>
+      ) : (
+        <g className="mascot-blink">
+          <ellipse cx="52" cy="48.5" rx="5" ry="6.5" fill="url(#hi-iris)" />
+          <ellipse cx="52" cy="49.5" rx="2.5" ry="4" fill="#082f49" />
+          <circle cx="50.2" cy="46" r="1.9" fill="#fff" />
+          <ellipse cx="76" cy="48.5" rx="5" ry="6.5" fill="url(#hi-iris)" />
+          <ellipse cx="76" cy="49.5" rx="2.5" ry="4" fill="#082f49" />
+          <circle cx="74.2" cy="46" r="1.9" fill="#fff" />
+        </g>
+      )}
+      {/* naso e bocca */}
+      <path d="M64 52.5 L63.2 56" stroke="#eab89a" strokeWidth="1.6" strokeLinecap="round" />
+      {reacting ? (
+        <path d="M56 60 Q64 68 72 60 Q68.5 65.5 64 65.5 Q59.5 65.5 56 60 Z" fill="#9a3412" />
+      ) : (
+        <path d="M58 60.5 Q64 64.5 70 60.5" stroke="#9a3412" strokeWidth="2.4" strokeLinecap="round" fill="none" />
+      )}
+      <g className="mascot-sparkle" fill="#facc15">
+        <path d="M108 58 L110 63 L115 65 L110 67 L108 72 L106 67 L101 65 L106 63 Z" />
+        <path d="M18 60 L19.3 63.2 L22.5 64.5 L19.3 65.8 L18 69 L16.7 65.8 L13.5 64.5 L16.7 63.2 Z" opacity="0.8" />
+      </g>
+    </>
+  ));
+}
+
 export const MASCOT_SVGS: Record<MascotId, (p: SvgMascotProps) => React.ReactNode> = {
   'black-cat': BlackCat,
   stickman: Stickman,
   fox: Fox,
   anime: Anime,
+  'anime-m': AnimeM,
 };
