@@ -40,7 +40,7 @@ input:focus,select:focus,textarea:focus{border-color:#22c55e;box-shadow:0 0 0 3p
 .mascot-sway{animation:mascot-sway 3s ease-in-out infinite}
 .mascot-wave{animation:mascot-wave 2.2s ease-in-out infinite}
 .mascot-sparkle{animation:mascot-sparkle 2.4s ease-in-out infinite;transform-box:fill-box;transform-origin:center}
-.mascot-jump{animation:mascot-jump .8s ease;transform-origin:32px 60px}
+.mascot-jump{animation:mascot-jump .8s ease;transform-box:fill-box;transform-origin:50% 100%}
 @media (prefers-reduced-motion:reduce){
   .mascot-idle,.mascot-blink,.mascot-sway,.mascot-wave,.mascot-sparkle,.mascot-jump{animation:none}
 }
