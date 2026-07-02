@@ -68,14 +68,17 @@ function BlackCat({ size, reacting }: SvgMascotProps) {
         </g>
       ) : (
         <g className="mascot-blink">
-          <ellipse cx="49" cy="46" rx="8" ry="9.5" fill="url(#nc-iris)" />
-          <ellipse cx="49" cy="46.5" rx="4" ry="7" fill="#111827" />
-          <circle cx="46.2" cy="42.5" r="2.8" fill="#fff" />
-          <circle cx="52" cy="50" r="1.2" fill="#fff" opacity="0.85" />
-          <ellipse cx="75" cy="46" rx="8" ry="9.5" fill="url(#nc-iris)" />
-          <ellipse cx="75" cy="46.5" rx="4" ry="7" fill="#111827" />
-          <circle cx="72.2" cy="42.5" r="2.8" fill="#fff" />
-          <circle cx="78" cy="50" r="1.2" fill="#fff" opacity="0.85" />
+          {/* occhi socchiusi, sguardo serio: palpebra piatta sopra l'iride */}
+          <path d="M41 44 Q49 41.5 57 44 Q58 52 49 55 Q40 52 41 44 Z" fill="url(#nc-iris)" />
+          <ellipse cx="49" cy="48.5" rx="3.6" ry="5" fill="#111827" />
+          <circle cx="45.8" cy="45.8" r="2" fill="#fff" />
+          <circle cx="52" cy="51" r="1" fill="#fff" opacity="0.85" />
+          <path d="M39.5 44.2 Q49 41 58.5 44.2" stroke="#18181b" strokeWidth="2.6" strokeLinecap="round" fill="none" />
+          <path d="M67 44 Q75 41.5 83 44 Q84 52 75 55 Q66 52 67 44 Z" fill="url(#nc-iris)" />
+          <ellipse cx="75" cy="48.5" rx="3.6" ry="5" fill="#111827" />
+          <circle cx="71.8" cy="45.8" r="2" fill="#fff" />
+          <circle cx="78" cy="51" r="1" fill="#fff" opacity="0.85" />
+          <path d="M65.5 44.2 Q75 41 84.5 44.2" stroke="#18181b" strokeWidth="2.6" strokeLinecap="round" fill="none" />
         </g>
       )}
       {/* naso, bocca :3, guance, baffi */}
