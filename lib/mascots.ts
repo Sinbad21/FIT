@@ -1,11 +1,17 @@
-// Registry delle mascotte selezionabili. Ogni mascotte ha un fallback SVG animato
-// integrato; se in /public/mascots/<id>.riv è presente un file Rive, viene usato quello.
+// Registry delle mascotte selezionabili. Ogni mascotte è un'animazione Lottie
+// professionale (Noto Animated Emoji di Google, licenza Apache 2.0) servita da
+// /public/mascots/<id>.json; se è presente anche /public/mascots/<id>.riv
+// (creato con l'editor Rive) viene usato quello.
 export type MascotId = 'black-cat' | 'stickman' | 'fox' | 'anime' | 'anime-m';
 
 export type MascotDef = {
   id: MascotId;
   name: string;
   description: string;
+  /** Animazione Lottie principale (loop). */
+  lottieSrc: string;
+  /** Animazione Lottie opzionale riprodotta una volta al tap. */
+  tapLottieSrc?: string;
   /** Percorso del file Rive (opzionale, caricato solo se esiste). */
   rivSrc: string;
   /** Nome della state machine attesa nel file Rive. */
@@ -15,11 +21,11 @@ export type MascotDef = {
 };
 
 export const MASCOTS: MascotDef[] = [
-  { id: 'black-cat', name: 'Kira', description: 'Gatta nera, pigra ma sveglia', rivSrc: '/mascots/black-cat.riv', stateMachine: 'Mascot', accent: '#22c55e' },
-  { id: 'stickman', name: 'Stick', description: 'Stickman, pura energia', rivSrc: '/mascots/stickman.riv', stateMachine: 'Mascot', accent: '#2563eb' },
-  { id: 'fox', name: 'Kitsune', description: 'Volpe furba e scattante', rivSrc: '/mascots/fox.riv', stateMachine: 'Mascot', accent: '#f97316' },
-  { id: 'anime', name: 'Yui', description: 'Coach anime, atletica e tonica', rivSrc: '/mascots/anime.riv', stateMachine: 'Mascot', accent: '#ec4899' },
-  { id: 'anime-m', name: 'Hiro', description: 'Coach anime, muscoli d’acciaio', rivSrc: '/mascots/anime-m.riv', stateMachine: 'Mascot', accent: '#6366f1' },
+  { id: 'black-cat', name: 'Kira', description: 'Gattina, pigra ma sveglia', lottieSrc: '/mascots/black-cat.json', tapLottieSrc: '/mascots/black-cat-tap.json', rivSrc: '/mascots/black-cat.riv', stateMachine: 'Mascot', accent: '#22c55e' },
+  { id: 'stickman', name: 'Boo', description: 'Fantasmino, pura energia', lottieSrc: '/mascots/stickman.json', rivSrc: '/mascots/stickman.riv', stateMachine: 'Mascot', accent: '#2563eb' },
+  { id: 'fox', name: 'Kitsune', description: 'Volpe furba e scattante', lottieSrc: '/mascots/fox.json', rivSrc: '/mascots/fox.riv', stateMachine: 'Mascot', accent: '#f97316' },
+  { id: 'anime', name: 'Yui', description: 'Coach scatenata, balla sempre', lottieSrc: '/mascots/anime.json', rivSrc: '/mascots/anime.riv', stateMachine: 'Mascot', accent: '#ec4899' },
+  { id: 'anime-m', name: 'Hiro', description: 'Muscoli d’acciaio', lottieSrc: '/mascots/anime-m.json', rivSrc: '/mascots/anime-m.riv', stateMachine: 'Mascot', accent: '#6366f1' },
 ];
 
 export const DEFAULT_MASCOT: MascotId = 'black-cat';

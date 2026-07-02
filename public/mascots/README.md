@@ -1,17 +1,19 @@
-# File Rive delle mascotte
+# Asset delle mascotte
 
-L'app cerca in questa cartella un file Rive per ogni mascotte; se il file manca
-viene mostrato automaticamente il fallback SVG animato integrato.
+Le mascotte sono animazioni **Lottie** (`<id>.json`) riprodotte in loop con
+lottie-web. I file provengono dal set [Noto Animated Emoji di Google]
+(https://googlefonts.github.io/noto-emoji-animation/), licenza Apache 2.0.
 
-Nomi attesi (vedi `lib/mascots.ts`):
+- `black-cat.json` — gattina "Kira" (+ `black-cat-tap.json`, reazione occhi a
+  cuore riprodotta una volta al tap)
+- `stickman.json` — fantasmino "Boo"
+- `fox.json` — volpe "Kitsune"
+- `anime.json` — ballerina "Yui"
+- `anime-m.json` — bicipite "Hiro"
 
-- `black-cat.riv` — gatta nera "Kira"
-- `stickman.riv` — stickman "Stick"
-- `fox.riv` — volpe "Kitsune"
-- `anime.riv` — coach anime "Yui" (atletica)
-- `anime-m.riv` — coach anime "Hiro" (muscoloso)
+## Override con Rive
 
-## Come creare/esportare un file
+Se accanto al `.json` è presente un file `<id>.riv`, l'app usa quello.
 
 1. Apri l'editor gratuito su https://rive.app (oppure remixa una mascotte dalla
    [community](https://rive.app/community/)).
@@ -20,5 +22,3 @@ Nomi attesi (vedi `lib/mascots.ts`):
    - un **input trigger chiamato `tap`** collegato a una transizione verso
      l'animazione di reazione (che poi rientra nell'idle).
 3. Esporta il file (`Download > .riv`) e copialo qui con il nome atteso.
-
-Nient'altro da fare: al prossimo avvio l'app usa il file Rive al posto dell'SVG.
