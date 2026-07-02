@@ -4,13 +4,18 @@ Priorità di caricamento per ogni mascotte: **`<id>.riv`** (Rive) →
 **`img/<id>.png`** (illustrazione, es. render 3D generato con AI) →
 **`<id>.json`** (animazione Lottie, sempre presente come default).
 
-## Illustrazioni 3D (img/)
+## Illustrazioni e animazioni (img/)
 
-Metti in `img/` un PNG (o WebP) **con sfondo trasparente**, idealmente
-quadrato ≥512px, chiamato `black-cat.png`, `stickman.png`, `fox.png`,
-`anime.png`, `anime-m.png`. L'app lo anima via CSS (fluttuazione idle,
-saltello con squash al tap). Se accanto c'è anche `<id>-tap.png` (stessa
-mascotte in posa esultante), al tap viene mostrato quello per un attimo.
+Metti in `img/` un file **con sfondo trasparente**, quadrato ≥512px,
+chiamato `black-cat`, `stickman`, `fox`, `anime` o `anime-m` con estensione:
+
+- **`.webp` o `.gif` animato** (consigliato): idle vera in loop — ad es.
+  generata con un tool AI image-to-video dal render del personaggio — che il
+  browser riproduce nativamente;
+- **`.png` statico**: l'app lo anima via CSS (fluttuazione idle, saltello al tap).
+
+Se accanto c'è anche `<id>-tap.<ext>` (reazione/esultanza), al tap viene
+mostrato quello per un attimo. Priorità estensioni: webp > gif > png.
 
 ## Animazioni Lottie (default)
 
